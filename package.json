@@ -4,7 +4,7 @@
 		"build": "parcel build src/manifest.json --no-content-hash --no-source-maps --dist-dir distribution --no-cache --detailed-report 0",
 		"lint": "run-p lint:*",
 		"lint-fix": "run-p 'lint:* -- --fix'",
-		"lint:css": "stylelint source/**/*.css",
+		"lint:css": "stylelint src/**/*.css",
 		"lint:js": "xo",
 		"test": "run-p lint:* build",
 		"watch": "parcel watch src/manifest.json --dist-dir distribution --no-cache --no-hmr"
@@ -30,6 +30,8 @@
 	},
 	"devDependencies": {
 		"@parcel/config-webextension": "^2.6.2",
+		"@types/react": "^18.2.6",
+		"@types/react-dom": "^18.2.4",
 		"npm-run-all": "^4.1.5",
 		"parcel": "^2.6.2",
 		"stylelint": "^14.9.1",
