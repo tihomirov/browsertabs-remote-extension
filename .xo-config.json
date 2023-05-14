@@ -6,6 +6,7 @@
   "rules": {
     "import/extensions": "off",
     "n/file-extension-in-import": "off",
-    "unicorn/filename-case": "off"
+    "unicorn/filename-case": "off",
+    "capitalized-comments": "off"
   }
 }
