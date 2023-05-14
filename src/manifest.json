@@ -15,6 +15,12 @@
 		"service_worker": "background.ts",
 		"type": "module"
 	},
+	 "content_scripts": [
+    {
+      "js": ["content/index.ts"],
+      "matches": ["https://*/*", "http://*/*"]
+    }
+  ],
 	"action": { 
 		"default_popup": "popup/index.html"
 	}
