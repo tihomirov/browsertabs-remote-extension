@@ -13,12 +13,6 @@
 		"last 1 Chrome version",
 		"last 1 Firefox version"
 	],
-	"xo": {
-		"envs": [
-			"browser",
-			"webextensions"
-		]
-	},
 	"stylelint": {
 		"extends": "stylelint-config-xo"
 	},
