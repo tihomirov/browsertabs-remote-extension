@@ -23,6 +23,8 @@
 		"extends": "stylelint-config-xo"
 	},
 	"dependencies": {
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
 		"webext-base-css": "^1.4.1",
 		"webext-options-sync": "^3.1.0"
 	},
@@ -42,8 +44,8 @@
 			]
 		}
 	},
- 	"@parcel/bundler-default-bug": "https://github.com/parcel-bundler/parcel/issues/8071",
- 	"@parcel/bundler-default": {
- 		"minBundles": 10000000
- 	}
+	"@parcel/bundler-default-bug": "https://github.com/parcel-bundler/parcel/issues/8071",
+	"@parcel/bundler-default": {
+		"minBundles": 10000000
+	}
 }
