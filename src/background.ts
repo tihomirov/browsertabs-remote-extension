@@ -1,15 +1,11 @@
-import {io} from 'socket.io-client';
+const socket = new WebSocket('ws://localhost:8999');
 
-const socket = io('wss://127.0.0.1:3000');
-
-console.log('Background Script Run!');
-
-socket.on('connect', () => {
-	console.log(socket.id); // x8WIv7-mJelg7on_ALbx
+// Connection opened
+socket.addEventListener('open', event => {
+	socket.send('Hello Server!');
 });
 
-socket.send('TEST 123');
-
-socket.on('disconnect', () => {
-	console.log(socket.id); // undefined
+// Listen for messages
+socket.addEventListener('message', event => {
+	console.log('Message from server', event.data);
 });
