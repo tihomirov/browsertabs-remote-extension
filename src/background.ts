@@ -1,4 +1,4 @@
-const socket = new WebSocket('ws://localhost:8999');
+const socket = new WebSocket('ws://192.168.31.111:8999');
 
 // Connection opened
 socket.addEventListener('open', event => {
