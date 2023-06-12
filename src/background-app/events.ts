@@ -2,6 +2,7 @@ export enum EventType {
 	Ping,
 	Pong,
 	UpdateBrowserState,
+	GetBrowserState,
 	CloseTab,
 	ReloadTab,
 	CreateTab,
@@ -35,6 +36,10 @@ export type UpdateBrowserStateEvent = {
 	state: {
 		tabs: chrome.tabs.Tab[];
 	};
+};
+
+export type GetBrowserStateEvent = {
+	type: EventType.GetBrowserState;
 };
 
 export type TabEvent = Readonly<CloseTabEvent | ReloadTabEvent | CreateTabEvent>;

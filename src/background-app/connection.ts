@@ -1,5 +1,5 @@
 import {TabAction, CreateTab, CloseTab, ReloadTab, TabActionParameters} from './actions';
-import {TabEvent, EventType, PingEvent, PongEvent, UpdateBrowserStateEvent} from './events';
+import {TabEvent, EventType, PingEvent, PongEvent, UpdateBrowserStateEvent, GetBrowserStateEvent} from './events';
 import {assertUnreachable, isSomething} from './utils';
 
 const pingIntervalId = 10_000;
@@ -8,8 +8,8 @@ export class Connection {
 	private readonly _socket: WebSocket;
 	private readonly _pingIntervalId: number;
 
-	constructor(url: string) {
-		this._socket = new WebSocket(url);
+	constructor(host: string) {
+		this._socket = new WebSocket(`${host}?extension=true`);
 
 		this._socket.addEventListener('open', this.onOpen);
 		this._socket.addEventListener('message', this.onMessage);
@@ -28,20 +28,24 @@ export class Connection {
 	}
 
 	private readonly onOpen = (): void => {
-		void this.sendBrowserState();
 		chrome.tabs.onUpdated.addListener(this.sendBrowserState);
 	};
 
-	private readonly onMessage = async (event: MessageEvent<PongEvent | TabEvent>): Promise<void> => {
+	private readonly onMessage = async (event: MessageEvent<PongEvent | GetBrowserStateEvent | TabEvent>): Promise<void> => {
 		console.log('Message from server', event.data);
 
 		if (!isSomething(event.data) || !event.data.type) {
-			console.error('Message from server is not supported');
+			console.log('Message from server is not supported', event);
 			return;
 		}
 
 		if (event.data.type === EventType.Pong) {
 			console.log('Pong message from server');
+			return;
+		}
+
+		if (event.data.type === EventType.GetBrowserState) {
+			void this.sendBrowserState();
 			return;
 		}
 
