@@ -1,11 +1,11 @@
-const socket = new WebSocket('ws://192.168.31.111:8999');
+import {Connection} from './background-app';
 
-// Connection opened
-socket.addEventListener('open', event => {
-	socket.send('Hello Server!');
+const connection = new Connection('ws://192.168.31.111:8999');
+
+self.addEventListener('close', () => {
+	connection.destroy();
 });
 
-// Listen for messages
-socket.addEventListener('message', event => {
-	console.log('Message from server', event.data);
-});
+// chrome.runtime.onInstalled.addListener(() => {
+// 	console.log('!!!!!! ---- 123123');
+// });
