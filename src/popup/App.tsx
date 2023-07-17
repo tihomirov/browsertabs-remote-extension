@@ -3,6 +3,7 @@ import {createMemoryRouter, RouterProvider, Navigate} from 'react-router-dom';
 
 import {Root, Tabs} from './routes';
 import {ErrorPage} from './ErrorPage';
+import './styles.css';
 
 const router = createMemoryRouter([
 	{
@@ -22,7 +23,7 @@ const router = createMemoryRouter([
 ]);
 
 export const App: FC = () => (
-	<div>
+	<div className='app'>
 		<RouterProvider router={router} />
 	</div>
 );
