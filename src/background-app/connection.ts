@@ -31,25 +31,26 @@ export class Connection {
 		chrome.tabs.onUpdated.addListener(this.sendBrowserState);
 	};
 
-	private readonly onMessage = async (event: MessageEvent<PongEvent | GetBrowserStateEvent | TabEvent>): Promise<void> => {
+	private readonly onMessage = async (event: MessageEvent<string>): Promise<void> => {
 		console.log('Message from server', event.data);
+		const parsedMessage = JSON.parse(event.data) as PongEvent | GetBrowserStateEvent | TabEvent;
 
-		if (!isSomething(event.data) || !event.data.type) {
+		if (!isSomething(parsedMessage) || !parsedMessage.type) {
 			console.log('Message from server is not supported', event);
 			return;
 		}
 
-		if (event.data.type === EventType.Pong) {
+		if (parsedMessage.type === EventType.Pong) {
 			console.log('Pong message from server');
 			return;
 		}
 
-		if (event.data.type === EventType.GetBrowserState) {
+		if (parsedMessage.type === EventType.GetBrowserState) {
 			void this.sendBrowserState();
 			return;
 		}
 
-		const action = getTabAction(event.data);
+		const action = getTabAction(parsedMessage);
 		void action.run();
 	};
 
