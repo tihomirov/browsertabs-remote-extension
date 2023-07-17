@@ -1,12 +1,28 @@
-import React from 'react';
+import React, {FC} from 'react';
+import {createMemoryRouter, RouterProvider, Navigate} from 'react-router-dom';
 
-import {ConnectDevice} from './pages/connect-device';
+import {Root, Tabs} from './routes';
+import {ErrorPage} from './ErrorPage';
 
-export function App() {
-	return (
-		<>
-			<h1>Hello world!</h1>
-			<ConnectDevice />
-		</>
-	);
-}
+const router = createMemoryRouter([
+	{
+		path: '/',
+		element: <Root />,
+		errorElement: <ErrorPage />,
+		children: [
+			{
+				index: true,
+				element: <Navigate to='/tabs' replace />},
+			{
+				path: '/tabs',
+				element: <Tabs />,
+			},
+		],
+	},
+]);
+
+export const App: FC = () => (
+	<div>
+		<RouterProvider router={router} />
+	</div>
+);
