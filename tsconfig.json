@@ -3,6 +3,7 @@
     "jsx": "react",
     "experimentalDecorators": true,
     "isolatedModules": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "resolveJsonModule": true
   }
 }

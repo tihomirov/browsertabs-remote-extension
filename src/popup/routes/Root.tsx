@@ -1,21 +1,16 @@
 import React, {FC} from 'react';
 import {Outlet} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 
-export const Root: FC = () => (
-	<div>
-		<h1>React Router Contacts</h1>
-		<nav>
-			<ul>
-				<li>
-					<a href={'/contacts/1'}>Link 1</a>
-				</li>
-				<li>
-					<a href={'/contacts/2'}>Link 2</a>
-				</li>
-			</ul>
-		</nav>
+export const Root: FC = () => {
+	const {t} = useTranslation();
+
+	return (
 		<div>
-			<Outlet />
+			<h1>{t('common:header-title')}</h1>
+			<div>
+				<Outlet />
+			</div>
 		</div>
-	</div>
-);
+	);
+};
