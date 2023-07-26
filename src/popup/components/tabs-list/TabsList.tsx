@@ -1,13 +1,20 @@
 import {observer} from 'mobx-react-lite';
-import React, {FC, useCallback} from 'react';
+import React, {FC} from 'react';
+import {useTranslation} from 'react-i18next';
 
 import {useStores} from '../../hooks';
+import {Loader} from '../loader';
 
 export const TabsList: FC = observer(() => {
+	const {t} = useTranslation();
 	const {tabsStore} = useStores();
 
-	if (!tabsStore.tabs) {
-		return null;
+	if (tabsStore.loading) {
+		return <Loader/>;
+	}
+
+	if (!tabsStore.tabs?.length) {
+		return <div>{t('common:no-tabs-to-connect')}</div>;
 	}
 
 	return (
