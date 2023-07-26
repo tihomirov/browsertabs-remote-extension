@@ -9,7 +9,7 @@ export const Root: FC = () => {
 
 	return (
 		<div className={s.root}>
-			<h1>{t('common:header-title')}</h1>
+			<h1 className={s.title}>{t('common:header-title')}</h1>
 			<div className={s.container}>
 				<Outlet />
 			</div>

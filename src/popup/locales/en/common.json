@@ -1,4 +1,5 @@
 {
   "header-title": "Welcome to Tabs Remote",
-  "no-tabs-to-connect": "There are no tabs to connect"
+  "no-tabs-to-connect": "There are no tabs to connect",
+  "connect-tab-button": "Connect"
 }

@@ -1,0 +1,24 @@
+.tab {
+	display: flex;
+}
+
+.status {
+	color: gray;
+
+	&.connected {
+		color: greenyellow;
+	}
+
+	&.error {
+		color: red;
+	}
+}
+
+.title {
+	padding: 0 6px;
+}
+
+.button {
+	position: relative;
+}
+

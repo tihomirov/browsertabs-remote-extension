@@ -4,6 +4,7 @@ import {useTranslation} from 'react-i18next';
 
 import {useStores} from '../../hooks';
 import {Loader} from '../loader';
+import {TabItem} from '../tab-item';
 
 export const TabsList: FC = observer(() => {
 	const {t} = useTranslation();
@@ -18,11 +19,8 @@ export const TabsList: FC = observer(() => {
 	}
 
 	return (
-		<ul>
-			{tabsStore.tabs.map(tab =>
-				<li>
-					<div>{tab.title}</div>
-				</li>)}
-		</ul>
+		<>
+			{tabsStore.tabs.map(tab => <TabItem key={tab.id} tab={tab} />)}
+		</>
 	);
 });

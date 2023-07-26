@@ -17,6 +17,7 @@
 		"extends": "stylelint-config-standard-scss"
 	},
 	"dependencies": {
+		"classnames": "^2.3.2",
 		"i18next": "^23.2.11",
 		"i18next-browser-languagedetector": "^7.1.0",
 		"mobx": "^6.10.0",
@@ -41,8 +42,8 @@
 		"parcel": "^2.6.2",
 		"process": "^0.11.10",
 		"stylelint": "^15.5.0",
-		"stylelint-config-xo": "^0.21.0",
 		"stylelint-config-standard-scss": "^10.0.0",
+		"stylelint-config-xo": "^0.21.0",
 		"xo": "^0.50.0"
 	},
 	"webExt": {
