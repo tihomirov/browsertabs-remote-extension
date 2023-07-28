@@ -1,5 +1,7 @@
 {
   "header-title": "Вітаємо в Tabs Remote",
   "no-tabs-to-connect": "Нема доступних вкладок для підключення",
-  "connect-tab-button": "Підключити"
+  "tab-button-connect": "Підключити",
+  "tab-button-disconnect": "Відключити",
+  "tab-button-reconnect": "Перепідключити"
 }

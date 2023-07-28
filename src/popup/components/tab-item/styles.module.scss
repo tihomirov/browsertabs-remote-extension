@@ -1,5 +1,12 @@
 .tab {
 	display: flex;
+	flex-wrap: nowrap;
+	align-content: center;
+	justify-content: space-around;
+	align-items: center;
+	gap: 6px;
+	padding: 6px 0;
+	border-bottom: 2px solid gray;
 }
 
 .status {
@@ -15,10 +22,12 @@
 }
 
 .title {
-	padding: 0 6px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
 }
 
 .button {
-	position: relative;
+	margin-left: auto;
 }
 
