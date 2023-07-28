@@ -3,5 +3,7 @@
   "no-tabs-to-connect": "There are no tabs to connect",
   "tab-button-connect": "Connect",
   "tab-button-disconnect": "Disconnect",
-  "tab-button-reconnect": "Reconnect"
+  "tab-button-reconnect": "Reconnect",
+  "connect-tab-qr-tutorial": "Scan this QR code from your mobile App",
+  "connect-tab-qr-error": "Can not generate QR code. Please try again manually"
 }
