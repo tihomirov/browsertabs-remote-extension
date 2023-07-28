@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {createMemoryRouter, RouterProvider, Navigate} from 'react-router-dom';
 
-import {Root, Tabs} from './routes';
+import {Root, Tabs, ConnectTab} from './routes';
 import {ErrorPage} from './ErrorPage';
 import {RootStore, StoreProvider} from './stores';
 
@@ -17,10 +17,15 @@ const router = createMemoryRouter([
 		children: [
 			{
 				index: true,
-				element: <Navigate to='/tabs' replace />},
+				element: <Navigate to='tabs' replace />,
+			},
 			{
-				path: '/tabs',
+				path: 'tabs',
 				element: <Tabs />,
+			},
+			{
+				path: 'connect-tab/:tabId',
+				element: <ConnectTab />,
 			},
 		],
 	},

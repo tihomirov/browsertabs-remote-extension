@@ -23,10 +23,10 @@ export const TabItem: FC<TabItemProps> = ({tab}) => {
 	});
 
 	return (
-		<div key={tab.id} className={s.tab}>
+		<div className={s.tab}>
 			<span className={statusClassNames}>●</span>
 			<span className={s.title}>{tab.title}</span>
-			<TabItemButton connected={connected} error={error} />
+			<TabItemButton tabId={tab.id} connected={connected} error={error} />
 		</div>
 	);
 };
