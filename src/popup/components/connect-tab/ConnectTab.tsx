@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
-import QRCode from 'qrcode';
+import {toDataURL} from 'qrcode';
 
 import * as s from './styles.module.scss';
 
@@ -15,7 +15,7 @@ export const ConnectTab: FC = () => {
 
 	useEffect(() => {
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-call
-		QRCode.toDataURL(tabId.toString())
+		toDataURL(tabId.toString())
 			.then(data => {
 				setQrDataUrl(data);
 			})

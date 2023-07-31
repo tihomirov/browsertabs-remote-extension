@@ -1,7 +1,7 @@
-import browser from 'webextension-polyfill';
+import {tabs, Tabs} from 'webextension-polyfill';
 
 export const tabsService = {
-	async getTabs(): Promise<browser.Tabs.Tab[]> {
-		return browser.tabs.query({});
+	async getTabs(): Promise<Tabs.Tab[]> {
+		return tabs.query({});
 	},
 };
