@@ -5,7 +5,7 @@ import browser from 'webextension-polyfill';
 
 import {TabItemButton} from './TabItemButton';
 
-import s from './styles.module.scss';
+import * as s from './styles.module.scss';
 
 type TabItemProps = Readonly<{
 	tab: browser.Tabs.Tab;

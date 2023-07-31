@@ -5,7 +5,7 @@ import {Root, Tabs, ConnectTab} from './routes';
 import {ErrorPage} from './ErrorPage';
 import {RootStore, StoreProvider} from './stores';
 
-import s from './styles.module.scss';
+import * as s from './styles.module.scss';
 
 const rootStore = new RootStore();
 

@@ -3,7 +3,7 @@ import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import QRCode from 'qrcode';
 
-import s from './styles.module.scss';
+import * as s from './styles.module.scss';
 
 export const ConnectTab: FC = () => {
 	const {t} = useTranslation();

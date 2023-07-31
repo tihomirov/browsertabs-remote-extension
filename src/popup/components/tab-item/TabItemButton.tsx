@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import {Link} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 
-import s from './styles.module.scss';
+import * as s from './styles.module.scss';
 
 type TabItemButtonProps = Readonly<{
 	tabId: number;

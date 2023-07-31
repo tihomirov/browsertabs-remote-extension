@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 
-import s from './styles.module.scss';
+import * as s from './styles.module.scss';
 
 export const Header: FC = () => {
 	const {t} = useTranslation();
