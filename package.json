@@ -6,7 +6,6 @@
 		"lint": "run-p lint:*",
 		"lint-fix": "run-p 'lint:* -- --fix'",
 		"lint:css": "stylelint src/**/*.scss",
-		"lint:js": "xo",
 		"test": "run-p lint:* build",
 		"watch": "run-p watch:*",
 		"watch:parcel": "parcel watch src/manifest.json --dist-dir distribution --no-cache --no-hmr",
@@ -49,9 +48,7 @@
 		"sass": "^1.64.1",
 		"stylelint": "^15.5.0",
 		"stylelint-config-standard-scss": "^10.0.0",
-		"stylelint-config-xo": "^0.21.0",
-		"typed-scss-modules": "^7.1.2",
-		"xo": "^0.55.0"
+		"typed-scss-modules": "^7.1.2"
 	},
 	"webExt": {
 		"sourceDir": "distribution",
