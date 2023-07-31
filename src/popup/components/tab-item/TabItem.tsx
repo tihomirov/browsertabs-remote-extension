@@ -1,6 +1,5 @@
 import classNames from 'classnames';
 import React, {FC, useMemo, useState} from 'react';
-import {useTranslation} from 'react-i18next';
 import browser from 'webextension-polyfill';
 
 import {TabItemButton} from './TabItemButton';
@@ -12,7 +11,6 @@ type TabItemProps = Readonly<{
 }>;
 
 export const TabItem: FC<TabItemProps> = ({tab}) => {
-	const {t} = useTranslation();
 	const random = useMemo(() => Math.random(), []);
 	const [connected] = useState(random > 0.4 && random < 0.8);
 	const [error] = useState(random > 0.8);
