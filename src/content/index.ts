@@ -1,1 +1,3 @@
-console.log('Run Content Script!');
+import * as peer from './peer'
+
+console.log('Run Content Script!', peer);

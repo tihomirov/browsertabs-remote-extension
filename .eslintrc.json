@@ -21,7 +21,8 @@
     "rules": {
         // turn on errors for missing imports
         "import/no-unresolved": "error",
-        "quotes": ["error", "single"]
+        "quotes": ["error", "single"],
+        "object-curly-spacing": ["error", "never", { "objectsInObjects": false }]
     },
     "settings": {
         "import/resolver": {
