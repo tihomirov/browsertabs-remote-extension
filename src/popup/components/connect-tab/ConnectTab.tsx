@@ -1,20 +1,12 @@
 import React, {FC, useEffect, useState} from 'react';
-// import {Peer} from 'peerjs';
+import {Peer} from 'peerjs';
 import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {toDataURL} from 'qrcode';
 
 import * as s from './styles.module.scss';
 
-// const randomId = '0296b895-b0a8-96a9-cae1-fcc0ced0119C';
-// const peer = new Peer(randomId);
-			
-// const conn = peer.connect('0296b895-b0a8-96a9-cae1-fcc0ced0119R');
-
-// conn.on('open', () => {
-// 	console.log('Peer!!! open');
-// 	conn.send('hi!');
-// });
+let inited = false
 
 export const ConnectTab: FC = () => {
 	const {t} = useTranslation();
@@ -31,6 +23,27 @@ export const ConnectTab: FC = () => {
 			.catch(() => {
 				setQrError(t('common:connect-tab-qr-error'));
 			});
+
+		if (!inited) {
+      const peer = new Peer('0296b895-b0a8-96a9-cae1-fcc0ced0119C');
+
+			setTimeout(() => {
+				const conn = peer.connect('0296b895-b0a8-96a9-cae1-fcc0ced0119R');
+
+				conn.on('open', () => {
+					console.log('Peer!!! open');
+	
+					let count = 0;
+					setInterval(() => {
+						console.log('hi.', count);        
+						conn.send('hi - ' + count);
+						count++;
+					}, 1000)
+				});
+			}, 2000)
+
+			inited = true;
+		}
 	}, []);
 
 	return (
