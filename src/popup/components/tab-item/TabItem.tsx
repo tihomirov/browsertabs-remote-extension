@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, {FC, useMemo, useState} from 'react';
+import React, {FC, useState} from 'react';
 import browser from 'webextension-polyfill';
 
 import {TabItemButton} from './TabItemButton';
@@ -11,9 +11,8 @@ type TabItemProps = Readonly<{
 }>;
 
 export const TabItem: FC<TabItemProps> = ({tab}) => {
-	const random = useMemo(() => Math.random(), []);
-	const [connected] = useState(random > 0.4 && random < 0.8);
-	const [error] = useState(random > 0.8);
+	const [connected] = useState(false);
+	const [error] = useState(false);
 
 	const statusClassNames = classNames(s.status, {
 		[s.connected]: connected,

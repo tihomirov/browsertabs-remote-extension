@@ -1,12 +1,20 @@
 import React, {FC, useEffect, useState} from 'react';
-import {Peer} from 'peerjs';
+// import {Peer} from 'peerjs';
 import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {toDataURL} from 'qrcode';
+import browser from 'webextension-polyfill';
+
+import {StartConnectionTabMessage, TabMessageType, TabMessageResponse} from '../../../common/types';
+import {Response, ResponseFactory} from '../../../common/utils';
 
 import * as s from './styles.module.scss';
 
-let inited = false
+// let inited = false
+type StartConnectionResponse = TabMessageResponse[TabMessageType.StartConnection];
+const startConnectionMessage: StartConnectionTabMessage = {
+	type: TabMessageType.StartConnection,
+}
 
 export const ConnectTab: FC = () => {
 	const {t} = useTranslation();
@@ -15,35 +23,45 @@ export const ConnectTab: FC = () => {
 	const [qrError, setQrError] = useState<string | undefined>();
 
 	useEffect(() => {
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-call
-		toDataURL(tabId.toString())
-			.then(data => {
-				setQrDataUrl(data);
-			})
-			.catch(() => {
-				setQrError(t('common:connect-tab-qr-error'));
-			});
+		const sendStartConnection = async () => {
+			const response: Response<StartConnectionResponse> = await browser.tabs.sendMessage(Number(tabId), startConnectionMessage);
 
-		if (!inited) {
-      const peer = new Peer('0296b895-b0a8-96a9-cae1-fcc0ced0119C');
+			console.log('response !!!', response)
 
-			setTimeout(() => {
-				const conn = peer.connect('0296b895-b0a8-96a9-cae1-fcc0ced0119R');
+			if (ResponseFactory.isFail(response)) {
+				console.error(response.data.message)
+				setQrError(t('common:connect-tab-peer-id-error'))
+				return;
+			}
 
-				conn.on('open', () => {
-					console.log('Peer!!! open');
-	
-					let count = 0;
-					setInterval(() => {
-						console.log('hi.', count);        
-						conn.send('hi - ' + count);
-						count++;
-					}, 1000)
-				});
-			}, 2000)
-
-			inited = true;
+			toDataURL(response.data.peerId)
+			.then(data => setQrDataUrl(data))
+			.catch(() => setQrError(t('common:connect-tab-qr-error')));
 		}
+
+		void sendStartConnection();
+
+		// if (!inited) {
+    //   const peer = new Peer('0296b895-b0a8-96a9-cae1-fcc0ced0119C');   
+		// 	console.log('new Peer .', peer.id);   
+
+		// 	setTimeout(() => {
+		// 		const conn = peer.connect('0296b895-b0a8-96a9-cae1-fcc0ced0119R');
+
+		// 		conn.on('open', () => {
+		// 			console.log('Peer!!! open');
+	
+		// 			let count = 0;
+		// 			setInterval(() => {
+		// 				console.log('hi.', count);          
+		// 				conn.send('hi - ' + count);
+		// 				count++;
+		// 			}, 1000)
+		// 		});
+		// 	}, 2000)
+
+		// 	inited = true;
+		// }
 	}, []);
 
 	return (

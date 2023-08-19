@@ -1,3 +1,4 @@
-import * as peer from './peer'
+import {peerConnection} from './peer'
+console.log('Run Content Script!');
 
-console.log('Run Content Script!', peer);
+peerConnection.init();
