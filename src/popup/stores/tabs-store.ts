@@ -85,6 +85,6 @@ export class TabsStore {
 			return;
 		}
 
-		this._tabsConnectionStatus.set(tabId, [!!response.data.peerId, undefined]);
+		runInAction(() => this._tabsConnectionStatus.set(tabId, [!!response.data.peerId, undefined]))
 	}
 }

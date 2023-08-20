@@ -3,7 +3,7 @@ import {fromEventPattern, Observable} from 'rxjs';
 import {filter, map} from 'rxjs/operators';
 
 import {TabMessage, TabMessageType, TabMessageResponse} from '../../common/types';
-import {isSomething, tabMessageTypeguard, Response} from '../../common/utils';
+import {isSomething, tabMessageTypeguard, Response, ResponseFactory} from '../../common/utils';
 
 class TabsService {
 	readonly tabMessage$: Observable<TabMessage & {tabId?: number}>;
@@ -28,10 +28,17 @@ class TabsService {
 	}
 
 	async sendMessage<T extends TabMessageType>(
-		tabId: string | number, 
+		tabId: number, 
 		message: TabMessage
 	): Promise<Response<TabMessageResponse[T]>> {
-		return await tabs.sendMessage(Number(tabId), message);
+		try {
+			return await tabs.sendMessage(tabId, message);
+		} catch (error) {
+			console.error(tabId, error);
+			return ResponseFactory.fail({
+				message: 'Can not send message'
+			})
+		}
 	}
 }
 
