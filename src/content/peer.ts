@@ -9,6 +9,7 @@ type CheckConnectionResponse = TabMessageResponse[TabMessageType.CheckConnection
 
 class PeerConnection {
   private _peer: Peer | undefined = undefined;
+  private readonly _connections: Set<DataConnection> = new Set();
 
   constructor(private readonly _browser: browser.Browser) {
   }
@@ -36,7 +37,8 @@ class PeerConnection {
       case TabMessageType.CheckConnection:
         return sendResponse(
           ResponseFactory.success<CheckConnectionResponse>({
-            peerId: this._peer?.id
+            peerId: this._peer?.id,
+            connected: this._connections.size > 0,
           })
         );
       default:
@@ -60,14 +62,24 @@ class PeerConnection {
   }
 
   private readonly onConnection = (connection: DataConnection) => {
-    console.log('!!!!!! send TabMessageType.ConnectionOpen')
-
     this._browser.runtime.sendMessage({
-      type: TabMessageType.ConnectionOpen
+      type: TabMessageType.ConnectionUpdated,
+      connected: true,
     });
+
+    this._connections.add(connection);
 
     connection.on('data', (data) => {
       console.log('Received', data);
+    });
+
+    connection.on('close', () => {
+      this._connections.delete(connection);
+
+      this._browser.runtime.sendMessage({
+        type: TabMessageType.ConnectionUpdated,
+        connected: false,
+      });
     });
   }
 }

@@ -1,6 +1,5 @@
 import {makeObservable, observable, runInAction, computed} from 'mobx';
 import browser from 'webextension-polyfill';
-import {filter} from 'rxjs/operators';
 
 import {TabMessageType, TabMessageResponse} from '../../common/types';
 import {ResponseFactory, isSomething} from '../../common/utils';
@@ -21,11 +20,9 @@ export class TabsStore {
 		makeObservable(this);
 
 		// TODO: unsubscribe
-		tabsService.tabMessage$.pipe(
-			filter(message => message.type === TabMessageType.ConnectionOpen)
-		).subscribe(message => {
-			if (isSomething(message.tabId)) {
-				this._tabsConnectionStatus.set(message.tabId, [true, undefined])
+		tabsService.tabMessage$.subscribe(message => {
+			if (isSomething(message.tabId) && message.type === TabMessageType.ConnectionUpdated) {
+				this._tabsConnectionStatus.set(message.tabId, [message.connected, undefined])
 			}
 		})
 
@@ -85,6 +82,6 @@ export class TabsStore {
 			return;
 		}
 
-		runInAction(() => this._tabsConnectionStatus.set(tabId, [!!response.data.peerId, undefined]))
+		runInAction(() => this._tabsConnectionStatus.set(tabId, [response.data.connected, undefined]))
 	}
 }

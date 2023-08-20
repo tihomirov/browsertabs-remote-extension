@@ -32,19 +32,6 @@ export const ConnectTab: FC = () => {
 					.then(qr => setQrDataUrl(qr))
 					.catch(() => setQrError(t('common:connect-tab-qr-error')));
 			}
-
-			// console.log('onMessage !!!')
-			// browser.runtime.onMessage.addListener((message) => {
-			// 	console.log('!!! onMessage', message);
-			// 	if (!tabMessageTypeguard(message)) {
-			// 		// message is external. Do not need to handle
-			// 		return;
-			// 	}
-
-			// 	if (message.type === TabMessageType.ConnectionOpen) {
-			// 		// close QR code and redirect to all pages
-			// 	}
-			// });
 		}
 
 		void sendStartConnection();
