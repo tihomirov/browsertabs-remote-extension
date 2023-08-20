@@ -5,6 +5,7 @@ import {TabMessageResponse, TabMessageType} from '../common/types';
 import {tabMessageTypeguard, Response, ResponseFactory} from '../common/utils';
 
 type StartConnectionResponse = TabMessageResponse[TabMessageType.StartConnection];
+type CheckConnectionResponse = TabMessageResponse[TabMessageType.CheckConnection];
 
 class PeerConnection {
   private _peer: Peer | undefined = undefined;
@@ -22,7 +23,7 @@ class PeerConnection {
     this._peer?.destroy();
   }
 
-  private readonly onMessage = (message: unknown, _sender, sendResponse: (response: Response<StartConnectionResponse>) => void): true | void => {
+  private readonly onMessage = (message, _sender, sendResponse): true | void => {
     if (!tabMessageTypeguard(message)) {
       // message is external. Do not need to handle
       return;
@@ -32,6 +33,12 @@ class PeerConnection {
       case TabMessageType.StartConnection:
         this.startConnection(sendResponse)
         return true;
+      case TabMessageType.CheckConnection:
+        return sendResponse(
+          ResponseFactory.success<CheckConnectionResponse>({
+            peerId: this._peer?.id
+          })
+        );
       default:
         // do not need to handle other messages here
         return

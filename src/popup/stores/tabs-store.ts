@@ -67,9 +67,24 @@ export class TabsStore {
 	private async fetchTabs(): Promise<void> {
 		const tabs = await tabsService.getTabs();
 
+		tabs.forEach(tab => isSomething(tab.id) && this.checkConnection(tab.id))
+
 		runInAction(() => {
 			this._tabs = tabs;
 			this._loading = false;
 		});
+	}
+
+	private async checkConnection(tabId: number): Promise<void> {
+		const response = await tabsService.sendMessage<TabMessageType.CheckConnection>(tabId, {
+			type: TabMessageType.CheckConnection,
+		});
+
+		if (ResponseFactory.isFail(response)) {
+			console.error(response.data.message)
+			return;
+		}
+
+		this._tabsConnectionStatus.set(tabId, [!!response.data.peerId, undefined]);
 	}
 }
