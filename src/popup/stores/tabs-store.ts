@@ -1,19 +1,34 @@
 import {makeObservable, observable, runInAction, computed} from 'mobx';
 import browser from 'webextension-polyfill';
+import {filter} from 'rxjs/operators';
 
 import {TabMessageType, TabMessageResponse} from '../../common/types';
-import {ResponseFactory} from '../../common/utils';
+import {ResponseFactory, isSomething} from '../../common/utils';
 import {tabsService} from '../services';
+
+type ConnectionStatus = boolean;
+type ConnectionError = string | undefined;
 
 export class TabsStore {
 	@observable
 	private _tabs: browser.Tabs.Tab[] | undefined = undefined;
+	private readonly _tabsConnectionStatus = observable.map<number, [ConnectionStatus, ConnectionError]>();
 
 	@observable
 	private _loading = true;
 
 	constructor() {
 		makeObservable(this);
+
+		// TODO: unsubscribe
+		tabsService.tabMessage$.pipe(
+			filter(message => message.type === TabMessageType.ConnectionOpen)
+		).subscribe(message => {
+			if (isSomething(message.tabId)) {
+				this._tabsConnectionStatus.set(message.tabId, [true, undefined])
+			}
+		})
+
 		void this.fetchTabs();
 	}
 
@@ -25,6 +40,10 @@ export class TabsStore {
 	@computed
 	get loading(): boolean {
 		return this._loading;
+	}
+
+	getTabsConnectionStatus(tabId: number): [ConnectionStatus, ConnectionError] {
+		return this._tabsConnectionStatus.get(tabId) ?? [false, undefined];
 	}
 
 	async startConnection(
