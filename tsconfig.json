@@ -4,6 +4,7 @@
     "experimentalDecorators": true,
     "isolatedModules": true,
     "esModuleInterop": true,
+    "strictNullChecks": true,
     "resolveJsonModule": true
   }
 }
