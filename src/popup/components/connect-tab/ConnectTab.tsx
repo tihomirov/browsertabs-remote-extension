@@ -6,7 +6,7 @@ import {toDataURL} from 'qrcode';
 import browser from 'webextension-polyfill';
 
 import {StartConnectionTabMessage, TabMessageType, TabMessageResponse} from '../../../common/types';
-import {Response, ResponseFactory} from '../../../common/utils';
+import {Response, ResponseFactory, tabMessageTypeguard} from '../../../common/utils';
 
 import * as s from './styles.module.scss';
 
@@ -19,6 +19,7 @@ const startConnectionMessage: StartConnectionTabMessage = {
 export const ConnectTab: FC = () => {
 	const {t} = useTranslation();
 	const {tabId} = useParams();
+	const [peerId, setPeerId] = useState<string | undefined>();
 	const [qrDataUrl, setQrDataUrl] = useState<string | undefined>();
 	const [qrError, setQrError] = useState<string | undefined>();
 
@@ -34,39 +35,36 @@ export const ConnectTab: FC = () => {
 				return;
 			}
 
+			if (!response.data.peerId) {
+				return;
+			}
+
+			console.log('onMessage !!!')
+			browser.runtime.onMessage.addListener((message) => {
+				console.log('!!! onMessage', message);
+				if (!tabMessageTypeguard(message)) {
+					// message is external. Do not need to handle
+					return;
+				}
+
+				if (message.type === TabMessageType.ConnectionOpen) {
+					// close QR code and redirect to all pages
+				}
+			});
+			
+			setPeerId(response.data.peerId);
 			toDataURL(response.data.peerId)
 			.then(data => setQrDataUrl(data))
 			.catch(() => setQrError(t('common:connect-tab-qr-error')));
 		}
 
 		void sendStartConnection();
-
-		// if (!inited) {
-    //   const peer = new Peer('0296b895-b0a8-96a9-cae1-fcc0ced0119C');   
-		// 	console.log('new Peer .', peer.id);   
-
-		// 	setTimeout(() => {
-		// 		const conn = peer.connect('0296b895-b0a8-96a9-cae1-fcc0ced0119R');
-
-		// 		conn.on('open', () => {
-		// 			console.log('Peer!!! open');
-	
-		// 			let count = 0;
-		// 			setInterval(() => {
-		// 				console.log('hi.', count);          
-		// 				conn.send('hi - ' + count);
-		// 				count++;
-		// 			}, 1000)
-		// 		});
-		// 	}, 2000)
-
-		// 	inited = true;
-		// }
 	}, []);
 
 	return (
 		<div className={s.container}>
 			<span className={s.tutorial}>{t('common:connect-tab-qr-tutorial')}</span>
+			{peerId && <span className={s.tutorial}>{peerId}</span>}
 			{qrError && <span className={s.error}>{qrError}</span>}
 			{qrDataUrl && <img src={qrDataUrl} />}
 		</div>
