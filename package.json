@@ -1,6 +1,7 @@
 {
 	"private": true,
 	"scripts": {
+		"start": "run-p watch:*",
 		"build": "parcel build src/manifest.json --no-content-hash --no-source-maps --dist-dir distribution --no-cache --detailed-report 0",
 		"build:scss-types": "typed-scss-modules src",
 		"lint": "run-p lint:*",
