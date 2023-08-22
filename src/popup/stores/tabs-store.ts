@@ -1,17 +1,24 @@
 import {makeObservable, observable, runInAction, computed} from 'mobx';
 import browser from 'webextension-polyfill';
 
-import {TabMessageType, TabMessageResponse} from '../../common/types';
+import {TabMessageType, ConnectionStatus} from '../../common/types';
 import {ResponseFactory, isSomething} from '../../common/utils';
 import {tabsService} from '../services';
 
-type ConnectionStatus = boolean;
-type ConnectionError = string | undefined;
+type TabStatus = Readonly<{
+	connection: ConnectionStatus;
+	peerId?: string; 
+	error?: string
+}>;
+
+const defaultTabStatus: TabStatus = {
+	connection: ConnectionStatus.Closed,
+}
 
 export class TabsStore {
 	@observable
 	private _tabs: browser.Tabs.Tab[] | undefined = undefined;
-	private readonly _tabsConnectionStatus = observable.map<number, [ConnectionStatus, ConnectionError]>();
+	private readonly _tabsStatus = observable.map<number, TabStatus>();
 
 	@observable
 	private _loading = true;
@@ -22,7 +29,11 @@ export class TabsStore {
 		// TODO: unsubscribe
 		tabsService.tabMessage$.subscribe(message => {
 			if (isSomething(message.tabId) && message.type === TabMessageType.ConnectionUpdated) {
-				this._tabsConnectionStatus.set(message.tabId, [message.connected, undefined])
+				this._tabsStatus.set(message.tabId, {
+					connection: message.status,
+					peerId: message.peerId,
+					error: message.error,
+				})
 			}
 		})
 
@@ -39,26 +50,21 @@ export class TabsStore {
 		return this._loading;
 	}
 
-	getTabsConnectionStatus(tabId: number): [ConnectionStatus, ConnectionError] {
-		return this._tabsConnectionStatus.get(tabId) ?? [false, undefined];
+	getTabsStatus(tabId: number): TabStatus {
+		return this._tabsStatus.get(tabId) ?? defaultTabStatus;
 	}
 
 	async startConnection(
 		tabId: number
-	): Promise<[
-		TabMessageResponse[TabMessageType.StartConnection] | undefined, 
-		string | undefined
-	]> {
+	): Promise<string | undefined> {
 		const response = await tabsService.sendMessage<TabMessageType.StartConnection>(tabId, {
 			type: TabMessageType.StartConnection,
 		});
 
 		if (ResponseFactory.isFail(response)) {
 			console.error(response.data.message)
-			return [undefined, response.data.message];
+			return response.data.message;
 		}
-
-		return [response.data, undefined];
 	}
 
 	private async fetchTabs(): Promise<void> {
@@ -73,15 +79,13 @@ export class TabsStore {
 	}
 
 	private async checkConnection(tabId: number): Promise<void> {
-		const response = await tabsService.sendMessage<TabMessageType.CheckConnection>(tabId, {
-			type: TabMessageType.CheckConnection,
+		const response = await tabsService.sendMessage<TabMessageType.RequestConnectionUpdated>(tabId, {
+			type: TabMessageType.RequestConnectionUpdated,
 		});
 
 		if (ResponseFactory.isFail(response)) {
 			console.error(response.data.message)
 			return;
 		}
-
-		runInAction(() => this._tabsConnectionStatus.set(tabId, [response.data.connected, undefined]))
 	}
 }

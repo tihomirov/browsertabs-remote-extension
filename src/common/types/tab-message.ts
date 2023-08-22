@@ -1,8 +1,16 @@
-export enum TabMessageType {
+export const enum TabMessageType {
   StartConnection = 'StartConnection',
   CloseConnection = 'CloseConnection',
-  CheckConnection = 'CheckConnection',
+  // CheckConnection = 'CheckConnection',
+  RequestConnectionUpdated = 'RequestConnectionUpdated',
   ConnectionUpdated = 'ConnectionUpdated',
+}
+
+export const enum ConnectionStatus {
+	Closed,
+	Error,
+	Open,
+	Connected,
 }
 
 export type StartConnectionTabMessage = Readonly<{
@@ -13,28 +21,25 @@ export type CloseConnectionTabMessage = Readonly<{
   type: TabMessageType.CloseConnection;
 }>;
 
-export type CheckConnectionTabMessage = Readonly<{
-  type: TabMessageType.CheckConnection;
+export type RequestConnectionUpdatedTabMessage = Readonly<{
+  type: TabMessageType.RequestConnectionUpdated;
 }>;
 
 export type ConnectionUpdatedTabMessage = Readonly<{
   type: TabMessageType.ConnectionUpdated;
-  connected: boolean;
+  status: ConnectionStatus;
+  peerId?: string;
+  error?: string
 }>;
 
 export type TabMessage = StartConnectionTabMessage 
   | CloseConnectionTabMessage 
-  | CheckConnectionTabMessage 
+  | RequestConnectionUpdatedTabMessage 
   | ConnectionUpdatedTabMessage;
 
 export type TabMessageResponse = {
-  [TabMessageType.StartConnection]: Readonly<{ 
-    peerId?: string 
-  }>;
+  [TabMessageType.StartConnection]: void;
   [TabMessageType.CloseConnection]: undefined;
-  [TabMessageType.CheckConnection]: Readonly<{ 
-    peerId?: string 
-    connected: boolean,
-  }>;
+  [TabMessageType.RequestConnectionUpdated]: undefined;
   [TabMessageType.ConnectionUpdated]: undefined;
 };

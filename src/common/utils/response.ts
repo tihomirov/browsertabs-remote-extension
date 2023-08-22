@@ -2,13 +2,13 @@ import {isObject, isString, typeguard} from './is';
 import {Typeguard} from '../types';
 
 type PayloadFail = Readonly<{ message: string }>;
-export type ResponseSuccess<T> = Readonly<{ isSuccess: true; data: T }>;
+export type ResponseSuccess<T> = Readonly<{ isSuccess: true; data?: T }>;
 export type ResponseFail<T> = Readonly<{ isSuccess: false; data: T }>;
 
 export type Response<SuccessT, FailT = PayloadFail> = ResponseSuccess<SuccessT> | ResponseFail<FailT>;
 
 export class ResponseFactory {
-  static success<T>(data: T): ResponseSuccess<T> {
+  static success<T>(data?: T): ResponseSuccess<T> {
     return {isSuccess: true, data};
   }
 

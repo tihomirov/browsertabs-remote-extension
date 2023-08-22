@@ -1,12 +1,8 @@
 import {Peer, DataConnection} from 'peerjs';
-import browser from 'webextension-polyfill';
+import browser, {runtime} from 'webextension-polyfill';
 
-import {TabMessageResponse, TabMessageType} from '../common/types';
+import {TabMessageType, ConnectionStatus, ConnectionUpdatedTabMessage} from '../common/types';
 import {tabMessageTypeguard, ResponseFactory} from '../common/utils';
-
-type StartConnectionResponse = TabMessageResponse[TabMessageType.StartConnection];
-type CloseConnectionResponse = TabMessageResponse[TabMessageType.CloseConnection];
-type CheckConnectionResponse = TabMessageResponse[TabMessageType.CheckConnection];
 
 class PeerConnection {
   private _peer: Peer | undefined = undefined;
@@ -25,6 +21,18 @@ class PeerConnection {
     this._peer?.destroy();
   }
 
+  private get connectionStatus(): ConnectionStatus {
+    if (!this._peer || this._peer.destroyed) {
+      return ConnectionStatus.Closed;
+    }
+
+    if (this._peer.disconnected) {
+      return ConnectionStatus.Closed;
+    }
+
+    return this._connections.size > 0 ? ConnectionStatus.Connected : ConnectionStatus.Open;
+  }
+
   private readonly onMessage = (message, _sender, sendResponse): true | void => {
     if (!tabMessageTypeguard(message)) {
       // message is external. Do not need to handle
@@ -34,37 +42,48 @@ class PeerConnection {
     switch (message.type) {
       case TabMessageType.StartConnection:
         this.startConnection()
-          .then(responce => sendResponse(ResponseFactory.success<StartConnectionResponse>(responce)))
+          .then(() => sendResponse(ResponseFactory.success()))
           .catch(error => sendResponse(ResponseFactory.fail({message: error.message})));
         return true;
       case TabMessageType.CloseConnection:
         this.closeConnection()
-          .then(() => sendResponse(ResponseFactory.success<CloseConnectionResponse>(undefined)))
+          .then(() => sendResponse(ResponseFactory.success()))
           .catch(error => sendResponse(ResponseFactory.fail({message: error.message})));
         return true;
-      case TabMessageType.CheckConnection:
-        return sendResponse(
-          ResponseFactory.success<CheckConnectionResponse>({
-            peerId: this._peer?.id,
-            connected: this._connections.size > 0,
-          })
-        );
+      case TabMessageType.RequestConnectionUpdated:
+        sendConnectionUpdatedMessage({
+          status: this.connectionStatus,
+          peerId: this._peer?.id,
+        })
+        return sendResponse(ResponseFactory.success());
       default:
         // do not need to handle other messages here
-        return
+        return;
     }
   }
 
-  private async startConnection(): Promise<StartConnectionResponse> {
+  private async startConnection(): Promise<void> {
     return new Promise((resolve, reject) => {
       if (this._peer) {
-        return resolve({peerId: this._peer.id});
+        return resolve();
       }
 
       this._peer = new Peer();
 
-      this._peer.once('open', (peerId) => resolve({peerId}));
-      this._peer.on('error', (error) => reject(error));
+      this._peer.once('open', (peerId) => {
+        sendConnectionUpdatedMessage({
+          status: ConnectionStatus.Open,
+          peerId,
+        });
+        resolve()
+      });
+      this._peer.on('error', (error) => {
+        sendConnectionUpdatedMessage({
+          status: ConnectionStatus.Error,
+          error: error.message,
+        });
+        reject(error)
+      });
 
       this._peer.on('connection', this.onConnection);
     })
@@ -82,9 +101,9 @@ class PeerConnection {
   }
 
   private readonly onConnection = (connection: DataConnection) => {
-    this._browser.runtime.sendMessage({
-      type: TabMessageType.ConnectionUpdated,
-      connected: true,
+    sendConnectionUpdatedMessage({
+      status: ConnectionStatus.Connected,
+      peerId: this._peer?.id
     });
 
     this._connections.add(connection);
@@ -95,13 +114,16 @@ class PeerConnection {
 
     connection.on('close', () => {
       this._connections.delete(connection);
-
-      this._browser.runtime.sendMessage({
-        type: TabMessageType.ConnectionUpdated,
-        connected: false,
-      });
+      sendConnectionUpdatedMessage({status: ConnectionStatus.Closed});
     });
   }
 }
 
 export const peerConnection = new PeerConnection(browser);
+
+function sendConnectionUpdatedMessage(message: Omit<ConnectionUpdatedTabMessage, 'type'>): void {
+  runtime.sendMessage({
+    type: TabMessageType.ConnectionUpdated,
+    ...message,
+  });
+}

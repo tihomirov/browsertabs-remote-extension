@@ -5,6 +5,7 @@ import {observer} from 'mobx-react-lite';
 import {computed} from 'mobx'
 
 import {isSomething} from '../../../common/utils';
+import {ConnectionStatus} from '../../../common/types';
 import {TabItemButton} from './TabItemButton';
 
 import * as s from './styles.module.scss';
@@ -16,15 +17,16 @@ type TabItemProps = Readonly<{
 
 export const TabItem: FC<TabItemProps> = observer(({tab}) => {
 	const {tabsStore} = useStores();
-	const [connected, error] = computed(() => 
+	const tabsStatus = computed(() => 
 		isSomething(tab.id) 
-			? tabsStore.getTabsConnectionStatus(tab.id) 
-			: [false, undefined]
+			? tabsStore.getTabsStatus(tab.id) 
+			: undefined
 	).get();
 
 	const statusClassNames = classNames(s.status, {
-		[s.connected]: connected,
-		[s.error]: error,
+		[s.connected]: tabsStatus?.connection === ConnectionStatus.Connected,
+		[s.open]: tabsStatus?.connection === ConnectionStatus.Open,
+		[s.error]: tabsStatus?.connection === ConnectionStatus.Error,
 	});
 
 	return (
@@ -32,7 +34,11 @@ export const TabItem: FC<TabItemProps> = observer(({tab}) => {
 			<span className={statusClassNames}>●</span>
 			<span className={s.title}>{tab.title}</span>
 			{isSomething(tab.id) && (
-				<TabItemButton tabId={tab.id} connected={!!connected} error={!!error} />
+				<TabItemButton
+					tabId={tab.id}
+					connected={tabsStatus?.connection === ConnectionStatus.Connected}
+					error={tabsStatus?.connection === ConnectionStatus.Error}
+				/>
 			)}
 		</div>
 	);
