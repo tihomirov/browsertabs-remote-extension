@@ -40,6 +40,10 @@ class TabsService {
 			})
 		}
 	}
+
+	async reloadTab(tabId: number): Promise<void> {
+    await tabs.reload(tabId);
+  }
 }
 
 export const tabsService = new TabsService()

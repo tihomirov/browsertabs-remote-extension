@@ -67,6 +67,10 @@ export class TabsStore {
 		}
 	}
 
+	async reloadTab(tabId: number): Promise<void> {
+		return await tabsService.reloadTab(tabId);
+	}
+
 	private async fetchTabs(): Promise<void> {
 		const tabs = await tabsService.getTabs();
 

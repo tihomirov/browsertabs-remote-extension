@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useCallback, useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {toDataURL} from 'qrcode';
@@ -6,54 +6,66 @@ import {observer} from 'mobx-react-lite';
 import {computed} from 'mobx'
 
 import {isSomething} from '../../../common/utils';
+import {ConnectionStatus} from '../../../common/types';
 import {useStores} from '../../hooks';
 
+import {ConnectTabError} from './ConnectTabError';
 import * as s from './styles.module.scss';
-import {ConnectionStatus} from '../../../common/types';
 
 export const ConnectTab: FC = observer(() => {
 	const {t} = useTranslation();
 	const {tabId} = useParams();
 	const {tabsStore} = useStores();
-	const [peerId, setPeerId] = useState<string | undefined>();
 	const [qrDataUrl, setQrDataUrl] = useState<string | undefined>();
-	const [qrError, setQrError] = useState<string | undefined>();
-	const [connected, setConnected] = useState<boolean>(false);
+	const [errorMessage, setErrorMessage] = useState<string | undefined>();
+	const [reloadTabButton, setReloadTabButton] = useState<boolean>(false);
 	const tabsStatus = computed(() => isSomething(tabId) 
 		? tabsStore.getTabsStatus(Number(tabId)) 
 		: undefined
 ).get();
 
+const sendStartConnection = useCallback(async () => {
+	const connectionError = await tabsStore.startConnection(Number(tabId));
+
+	if (connectionError) {
+		console.error(connectionError);
+		setErrorMessage(t('common:connect-tab-peer-id-error'));
+		setReloadTabButton(true);
+		return;
+	} else {
+		setErrorMessage(undefined);
+		setReloadTabButton(false);
+	}
+}, [tabsStore, tabId])
+
+const onReloadTabClick = useCallback(async () => {
+	await tabsStore.reloadTab(Number(tabId));
+	await sendStartConnection();
+}, [sendStartConnection])
+
 	useEffect(() => {
-		const sendStartConnection = async () => {
-			const error = await tabsStore.startConnection(Number(tabId));
-
-			if (error) {
-				console.error(error)
-				setQrError(t('common:connect-tab-peer-id-error'))
-			}
-		}
-
-		void sendStartConnection();
+		const startConnection = () => sendStartConnection();
+		void startConnection();
 	}, []);
 
 	useEffect(() => {
-		setConnected(tabsStatus?.connection === ConnectionStatus.Connected);
-
 		if (tabsStatus?.connection === ConnectionStatus.Open && tabsStatus.peerId) {
-			setPeerId(tabsStatus.peerId);
 			toDataURL(tabsStatus.peerId)
 				.then(qr => setQrDataUrl(qr))
-				.catch(() => setQrError(t('common:connect-tab-qr-error')));
+				.catch(() => setErrorMessage(t('common:connect-tab-qr-error')));
 		}
-	}, [tabsStatus?.connection])
+	}, [tabsStatus]);
 
 	return (
 		<div className={s.container}>
 			<span className={s.tutorial}>{t('common:connect-tab-qr-tutorial')}</span>
-			{connected && <span>OK!!!!!!!!!</span>}
-			{peerId && <span className={s.tutorial}>{peerId}</span>}
-			{qrError && <span className={s.error}>{qrError}</span>}
+			{tabsStatus?.connection === ConnectionStatus.Connected && <span>OK!!!!!!!!!</span>}
+			{tabsStatus?.peerId && <span className={s.tutorial}>{tabsStatus.peerId}</span>}
+			<ConnectTabError
+				message={errorMessage}
+				reloadTabButton={reloadTabButton}
+				onReloadTabClick={onReloadTabClick}
+			/>
 			{qrDataUrl && <img src={qrDataUrl} />}
 		</div>
 	);
