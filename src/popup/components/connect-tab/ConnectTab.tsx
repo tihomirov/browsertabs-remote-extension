@@ -38,7 +38,6 @@ export const ConnectTab: FC = observer(() => {
 	}, []);
 
 	useEffect(() => {
-		console.log('!!!!! useEffect tabsStatus?.connection', tabsStatus?.connection, tabsStatus?.peerId)
 		setConnected(tabsStatus?.connection === ConnectionStatus.Connected);
 
 		if (tabsStatus?.connection === ConnectionStatus.Open && tabsStatus.peerId) {
