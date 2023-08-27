@@ -5,7 +5,7 @@ import {App} from './App';
 
 import './i18n';
 
-const container = document.querySelector('#root');
+const container = document.querySelector('#root')!;
 
 const root = createRoot(container);
 root.render(
