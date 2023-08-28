@@ -110,6 +110,18 @@ class PeerConnection {
 
     connection.on('data', (data) => {
       console.log('Received', data);
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      if (data?.type === 'HandshakeRequest') {
+        connection.send({
+          type: 'HandshakeResponse',
+          tabInfo: {
+            title: window.document.title,
+            favIconUrl: document.querySelector<HTMLLinkElement>('link[rel*=\'icon\']')?.href,
+          }
+        })
+      }
     });
 
     connection.on('close', () => {
