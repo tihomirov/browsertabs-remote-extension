@@ -6,12 +6,12 @@ import {Header} from '../components/header';
 import * as s from './styles.module.scss';
 
 export const Root: FC = () => {
-	return (
-		<div className={s.root}>
-			<Header/>
-			<div className={s.container}>
-				<Outlet />
-			</div>
-		</div>
-	);
+  return (
+    <div className={s.root}>
+      <Header/>
+      <div className={s.container}>
+        <Outlet />
+      </div>
+    </div>
+  );
 };

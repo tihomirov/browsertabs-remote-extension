@@ -7,20 +7,20 @@ import {Loader} from '../loader';
 import {TabItem} from '../tab-item';
 
 export const TabsList: FC = observer(() => {
-	const {t} = useTranslation();
-	const {tabsStore} = useStores();
+  const {t} = useTranslation();
+  const {tabsStore} = useStores();
 
-	if (tabsStore.loading) {
-		return <Loader/>;
-	}
+  if (tabsStore.loading) {
+    return <Loader/>;
+  }
 
-	if (!tabsStore.tabs?.length) {
-		return <div>{t('common:no-tabs-to-connect')}</div>;
-	}
+  if (!tabsStore.tabs?.length) {
+    return <div>{t('common:no-tabs-to-connect')}</div>;
+  }
 
-	return (
-		<>
-			{tabsStore.tabs.map(tab => <TabItem key={tab.id} tab={tab} />)}
-		</>
-	);
+  return (
+    <>
+      {tabsStore.tabs.map(tab => <TabItem key={tab.id} tab={tab} />)}
+    </>
+  );
 });

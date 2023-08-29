@@ -1,9 +1,9 @@
 import {TabsStore} from './tabs-store';
 
 export class RootStore {
-	tabsStore: TabsStore;
+  tabsStore: TabsStore;
 
-	constructor() {
-		this.tabsStore = new TabsStore();
-	}
+  constructor() {
+    this.tabsStore = new TabsStore();
+  }
 }

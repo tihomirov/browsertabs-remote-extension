@@ -11,17 +11,17 @@ type TabItemButtonProps = Readonly<{
 }>;
 
 export const TabItemButton: FC<TabItemButtonProps> = ({tabId, connected, error}) => {
-	const {t} = useTranslation();
+  const {t} = useTranslation();
 
-	if (error) {
-		return <button className={s.button}>{t('common:tab-button-reconnect')}</button>;
-	}
+  if (error) {
+    return <button className={s.button}>{t('common:tab-button-reconnect')}</button>;
+  }
 
-	if (connected) {
-		return <button className={s.button}>{t('common:tab-button-disconnect')}</button>;
-	}
+  if (connected) {
+    return <button className={s.button}>{t('common:tab-button-disconnect')}</button>;
+  }
 
-	return (
-		<Link className={s.button} to={`/connect-tab/${tabId}`}>{t('common:tab-button-connect')}</Link>
-	);
+  return (
+    <Link className={s.button} to={`/connect-tab/${tabId}`}>{t('common:tab-button-connect')}</Link>
+  );
 };

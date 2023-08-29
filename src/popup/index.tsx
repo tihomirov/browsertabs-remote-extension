@@ -9,8 +9,8 @@ const container = document.querySelector('#root')!;
 
 const root = createRoot(container);
 root.render(
-	<React.StrictMode>
-		<App />
-	</React.StrictMode>,
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
 );
 

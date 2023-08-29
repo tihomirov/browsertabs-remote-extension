@@ -27,15 +27,15 @@ export class ResponseFactory {
 
 export const responseTypeguard =
   <T, K = PayloadFail>(successDataTypeguard?: Typeguard<T>, errorDataTypeguard?: Typeguard<K>) =>
-  (response: unknown): response is Response<T, K> => {
-    const successTypeguard = typeguard<Response<T, K>>(
-      ['isSuccess', (value) => value === true],
-      ['data', successDataTypeguard ?? isObject],
-    );
-    const failTypeguard = typeguard<Response<T, K>>(
-      ['isSuccess', (value) => value === false],
-      ['data', errorDataTypeguard ?? typeguard(['message', isString])],
-    );
+    (response: unknown): response is Response<T, K> => {
+      const successTypeguard = typeguard<Response<T, K>>(
+        ['isSuccess', (value) => value === true],
+        ['data', successDataTypeguard ?? isObject],
+      );
+      const failTypeguard = typeguard<Response<T, K>>(
+        ['isSuccess', (value) => value === false],
+        ['data', errorDataTypeguard ?? typeguard(['message', isString])],
+      );
 
-    return successTypeguard(response) || failTypeguard(response);
-  };
+      return successTypeguard(response) || failTypeguard(response);
+    };

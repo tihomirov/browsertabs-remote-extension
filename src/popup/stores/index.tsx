@@ -12,5 +12,5 @@ export type StoreProviderProps = Readonly<{
 }>;
 
 export const StoreProvider: FC<StoreProviderProps> = (
-	{children, store},
+  {children, store},
 ): ReactElement => <StoreContext.Provider value={store}>{children}</StoreContext.Provider>;

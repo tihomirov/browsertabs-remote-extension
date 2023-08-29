@@ -22,6 +22,8 @@
         // turn on errors for missing imports
         "import/no-unresolved": "error",
         "quotes": ["error", "single"],
+        "indent": ["error", 2],
+        "no-mixed-spaces-and-tabs": 2,
         "object-curly-spacing": ["error", "never", { "objectsInObjects": false }]
     },
     "settings": {

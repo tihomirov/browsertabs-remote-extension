@@ -40,25 +40,25 @@ class PeerConnection {
     }
 
     switch (message.type) {
-      case TabMessageType.StartConnection:
-        this.startConnection()
-          .then(() => sendResponse(ResponseFactory.success()))
-          .catch(error => sendResponse(ResponseFactory.fail({message: error.message})));
-        return true;
-      case TabMessageType.CloseConnection:
-        this.closeConnection()
-          .then(() => sendResponse(ResponseFactory.success()))
-          .catch(error => sendResponse(ResponseFactory.fail({message: error.message})));
-        return true;
-      case TabMessageType.RequestConnectionUpdated:
-        sendConnectionUpdatedMessage({
-          status: this.connectionStatus,
-          peerId: this._peer?.id,
-        })
-        return sendResponse(ResponseFactory.success());
-      default:
-        // do not need to handle other messages here
-        return;
+    case TabMessageType.StartConnection:
+      this.startConnection()
+        .then(() => sendResponse(ResponseFactory.success()))
+        .catch(error => sendResponse(ResponseFactory.fail({message: error.message})));
+      return true;
+    case TabMessageType.CloseConnection:
+      this.closeConnection()
+        .then(() => sendResponse(ResponseFactory.success()))
+        .catch(error => sendResponse(ResponseFactory.fail({message: error.message})));
+      return true;
+    case TabMessageType.RequestConnectionUpdated:
+      sendConnectionUpdatedMessage({
+        status: this.connectionStatus,
+        peerId: this._peer?.id,
+      })
+      return sendResponse(ResponseFactory.success());
+    default:
+      // do not need to handle other messages here
+      return;
     }
   }
 

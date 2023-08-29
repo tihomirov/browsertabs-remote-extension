@@ -16,30 +16,30 @@ type TabItemProps = Readonly<{
 }>;
 
 export const TabItem: FC<TabItemProps> = observer(({tab}) => {
-	const {tabsStore} = useStores();
-	const tabsStatus = computed(() => 
-		isSomething(tab.id) 
-			? tabsStore.getTabsStatus(tab.id) 
-			: undefined
-	).get();
+  const {tabsStore} = useStores();
+  const tabsStatus = computed(() => 
+    isSomething(tab.id) 
+      ? tabsStore.getTabsStatus(tab.id) 
+      : undefined
+  ).get();
 
-	const statusClassNames = classNames(s.status, {
-		[s.connected]: tabsStatus?.connection === ConnectionStatus.Connected,
-		[s.open]: tabsStatus?.connection === ConnectionStatus.Open,
-		[s.error]: tabsStatus?.connection === ConnectionStatus.Error,
-	});
+  const statusClassNames = classNames(s.status, {
+    [s.connected]: tabsStatus?.connection === ConnectionStatus.Connected,
+    [s.open]: tabsStatus?.connection === ConnectionStatus.Open,
+    [s.error]: tabsStatus?.connection === ConnectionStatus.Error,
+  });
 
-	return (
-		<div className={s.tab}>
-			<span className={statusClassNames}>●</span>
-			<span className={s.title}>{tab.title}</span>
-			{isSomething(tab.id) && (
-				<TabItemButton
-					tabId={tab.id}
-					connected={tabsStatus?.connection === ConnectionStatus.Connected}
-					error={tabsStatus?.connection === ConnectionStatus.Error}
-				/>
-			)}
-		</div>
-	);
+  return (
+    <div className={s.tab}>
+      <span className={statusClassNames}>●</span>
+      <span className={s.title}>{tab.title}</span>
+      {isSomething(tab.id) && (
+        <TabItemButton
+          tabId={tab.id}
+          connected={tabsStatus?.connection === ConnectionStatus.Connected}
+          error={tabsStatus?.connection === ConnectionStatus.Error}
+        />
+      )}
+    </div>
+  );
 });

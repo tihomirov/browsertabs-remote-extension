@@ -10,31 +10,31 @@ import * as s from './styles.module.scss';
 const rootStore = new RootStore();
 
 const router = createMemoryRouter([
-	{
-		path: '/',
-		element: <Root />,
-		errorElement: <ErrorPage />,
-		children: [
-			{
-				index: true,
-				element: <Navigate to='tabs' replace />,
-			},
-			{
-				path: 'tabs',
-				element: <Tabs />,
-			},
-			{
-				path: 'connect-tab/:tabId',
-				element: <ConnectTab />,
-			},
-		],
-	},
+  {
+    path: '/',
+    element: <Root />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        index: true,
+        element: <Navigate to='tabs' replace />,
+      },
+      {
+        path: 'tabs',
+        element: <Tabs />,
+      },
+      {
+        path: 'connect-tab/:tabId',
+        element: <ConnectTab />,
+      },
+    ],
+  },
 ]);
 
 export const App: FC = () => (
-	<StoreProvider store={rootStore}>
-		<div className={s.app}>
-			<RouterProvider router={router} />
-		</div>
-	</StoreProvider>
+  <StoreProvider store={rootStore}>
+    <div className={s.app}>
+      <RouterProvider router={router} />
+    </div>
+  </StoreProvider>
 );

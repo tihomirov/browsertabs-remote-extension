@@ -9,16 +9,16 @@ type ConnectTabErrorProps = Readonly<{
 }>;
 
 export const ConnectTabError: FC<ConnectTabErrorProps> = ({message, reloadTabButton, onReloadTabClick}) => {
-	if (!message) {
-		return null;
-	}
+  if (!message) {
+    return null;
+  }
 
-	return (
-		<div className={s.container}>
-			<span className={s.error}>{message}</span>
-			{reloadTabButton && (
-				<div onClick={onReloadTabClick}>Reload Tab</div>
-			)}
-		</div>
-	);
+  return (
+    <div className={s.container}>
+      <span className={s.error}>{message}</span>
+      {reloadTabButton && (
+        <div onClick={onReloadTabClick}>Reload Tab</div>
+      )}
+    </div>
+  );
 };
