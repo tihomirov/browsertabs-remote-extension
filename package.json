@@ -7,7 +7,7 @@
 		"lint": "run-p lint:*",
 		"lint-fix": "run-p 'lint:* -- --fix'",
 		"lint:css": "stylelint src/**/*.scss",
-		"lint:js": "eslint --ext .tsx --ext .ts src/",
+		"lint:ts": "eslint --ext .tsx --ext .ts src/",
 		"test": "run-p lint:* build",
 		"watch": "run-p watch:*",
 		"watch:parcel": "parcel watch src/manifest.json --dist-dir distribution --no-cache --no-hmr",
