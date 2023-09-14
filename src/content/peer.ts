@@ -1,12 +1,13 @@
-import {Peer, DataConnection} from 'peerjs';
+import {DataConnection} from 'peerjs';
 import browser, {runtime} from 'webextension-polyfill';
+import {IExtentionConnection, PeerExtentionConnection} from 'browsertabs-remote-common/src/extention';
 
 import {TabMessageType, ConnectionStatus, ConnectionUpdatedTabMessage} from '../common/types';
 import {tabMessageTypeguard, ResponseFactory} from '../common/utils';
 
 class PeerConnection {
-  private _peer: Peer | undefined = undefined;
-  private readonly _connections: Set<DataConnection> = new Set();
+  private _connection: IExtentionConnection | undefined = undefined;
+  private _dataConnection: DataConnection | undefined = undefined;
 
   constructor(private readonly _browser: browser.Browser) {
   }
@@ -17,20 +18,22 @@ class PeerConnection {
 
   destroy(): void {
     this._browser.runtime.onMessage.removeListener(this.onMessage);
-    this._peer?.disconnect();
-    this._peer?.destroy();
+    this._connection?.destroy();
+  }
+
+  private get tabInfo() {
+    return {
+      title: window.document.title,
+      favIconUrl: document.querySelector<HTMLLinkElement>('link[rel*=\'icon\']')?.href,
+    }
   }
 
   private get connectionStatus(): ConnectionStatus {
-    if (!this._peer || this._peer.destroyed) {
+    if (!this._dataConnection || !this._connection) {
       return ConnectionStatus.Closed;
     }
 
-    if (this._peer.disconnected) {
-      return ConnectionStatus.Closed;
-    }
-
-    return this._connections.size > 0 ? ConnectionStatus.Connected : ConnectionStatus.Open;
+    return this._dataConnection ? ConnectionStatus.Connected : ConnectionStatus.Open;
   }
 
   private readonly onMessage = (message, _sender, sendResponse): true | void => {
@@ -53,7 +56,7 @@ class PeerConnection {
     case TabMessageType.RequestConnectionUpdated:
       sendConnectionUpdatedMessage({
         status: this.connectionStatus,
-        peerId: this._peer?.id,
+        peerId: this._connection?.peerId,
       })
       return sendResponse(ResponseFactory.success());
     default:
@@ -64,71 +67,60 @@ class PeerConnection {
 
   private async startConnection(): Promise<void> {
     return new Promise((resolve, reject) => {
-      if (this._peer) {
-        return resolve();
+      if (this._connection) {
+        this._connection.destroy();
       }
 
-      this._peer = new Peer();
+      this._connection = new PeerExtentionConnection(this.tabInfo);
 
-      this._peer.once('open', (peerId) => {
+      this._connection.open$.subscribe((peerId) => {
         sendConnectionUpdatedMessage({
           status: ConnectionStatus.Open,
           peerId,
         });
         resolve()
       });
-      this._peer.on('error', (error) => {
+
+      this._connection.error$.subscribe((error) => {
         sendConnectionUpdatedMessage({
           status: ConnectionStatus.Error,
-          error: error.message,
+          error,
         });
         reject(error)
       });
 
-      this._peer.on('connection', this.onConnection);
+      this._connection.connected$.subscribe((connection: DataConnection) => {
+        sendConnectionUpdatedMessage({
+          status: ConnectionStatus.Connected,
+          peerId: this._connection?.peerId,
+        });
+    
+        this._dataConnection = connection;
+      });
+
+      this._connection.close$.subscribe(() => {
+        this._dataConnection = undefined;
+        sendConnectionUpdatedMessage({status: ConnectionStatus.Closed});
+      });
+
+      this._connection.action$.subscribe((action) => {
+        console.log('Action$', action)
+      });
     })
   }
 
   private async closeConnection(): Promise<void> {
     return new Promise((resolve, reject) => {
-      if (!this._peer) {
+      if (!this._connection) {
         return reject(new Error('There is no Connection to close'));
       }
 
-      this._peer.disconnect();
-      this._peer.on('disconnected', () => resolve());
+      this._connection?.destroy();
+      resolve();
+      // this._peer.on('disconnected', () => resolve());
     })
   }
 
-  private readonly onConnection = (connection: DataConnection) => {
-    sendConnectionUpdatedMessage({
-      status: ConnectionStatus.Connected,
-      peerId: this._peer?.id
-    });
-
-    this._connections.add(connection);
-
-    connection.on('data', (data) => {
-      console.log('Received', data);
-
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      if (data?.type === 'HandshakeRequest') {
-        connection.send({
-          type: 'HandshakeResponse',
-          tabInfo: {
-            title: window.document.title,
-            favIconUrl: document.querySelector<HTMLLinkElement>('link[rel*=\'icon\']')?.href,
-          }
-        })
-      }
-    });
-
-    connection.on('close', () => {
-      this._connections.delete(connection);
-      sendConnectionUpdatedMessage({status: ConnectionStatus.Closed});
-    });
-  }
 }
 
 export const peerConnection = new PeerConnection(browser);

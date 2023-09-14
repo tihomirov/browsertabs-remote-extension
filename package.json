@@ -21,6 +21,7 @@
 		"extends": "stylelint-config-standard-scss"
 	},
 	"dependencies": {
+    "browsertabs-remote-common": "git@github.com:tihomirov/browsertabs-remote-common.git#e866918390cc1f2e4732c050ce43cc616c1e39c3",
 		"classnames": "^2.3.2",
 		"i18next": "^23.2.11",
 		"i18next-browser-languagedetector": "^7.1.0",
