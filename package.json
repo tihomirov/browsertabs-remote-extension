@@ -21,13 +21,12 @@
 		"extends": "stylelint-config-standard-scss"
 	},
 	"dependencies": {
-    "browsertabs-remote-common": "git@github.com:tihomirov/browsertabs-remote-common.git#e866918390cc1f2e4732c050ce43cc616c1e39c3",
+    "browsertabs-remote-common": "git@github.com:tihomirov/browsertabs-remote-common.git#cc434102de4db15f034f69c4289651930982603d",
 		"classnames": "^2.3.2",
 		"i18next": "^23.2.11",
 		"i18next-browser-languagedetector": "^7.1.0",
 		"mobx": "^6.10.0",
 		"mobx-react-lite": "^4.0.3",
-		"peerjs": "^1.4.7",
 		"qrcode": "^1.5.3",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
