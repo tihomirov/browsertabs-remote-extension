@@ -67,6 +67,18 @@ export class TabsStore {
     }
   }
 
+  async closeConnection(
+    tabId: number
+  ): Promise<string | undefined> {
+    const response = await tabsService.sendMessage<TabMessageType.CloseConnection>(tabId, {
+      type: TabMessageType.CloseConnection,
+    });
+
+    if (ResponseFactory.isFail(response)) {
+      return response.data.message;
+    }
+  }
+
   async reloadTab(tabId: number): Promise<void> {
     return await tabsService.reloadTab(tabId);
   }

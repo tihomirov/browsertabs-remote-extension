@@ -68,7 +68,7 @@ class PeerConnection {
   private async startConnection(): Promise<void> {
     return new Promise((resolve, reject) => {
       if (this._connection) {
-        this._connection.destroy();
+        return resolve();
       }
 
       this._connection = new PeerExtentionConnection(this.tabInfo);
@@ -117,7 +117,6 @@ class PeerConnection {
 
       this._connection?.destroy();
       resolve();
-      // this._peer.on('disconnected', () => resolve());
     })
   }
 
