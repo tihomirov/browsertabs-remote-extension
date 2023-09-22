@@ -1,4 +1,4 @@
-export const enum TabMessageType {
+export enum TabMessageType {
   StartConnection = 'StartConnection',
   CloseConnection = 'CloseConnection',
   // CheckConnection = 'CheckConnection',
@@ -6,7 +6,7 @@ export const enum TabMessageType {
   ConnectionUpdated = 'ConnectionUpdated',
 }
 
-export const enum ConnectionStatus {
+export enum ConnectionStatus {
 	Closed,
 	Error,
 	Open,

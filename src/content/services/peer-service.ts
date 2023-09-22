@@ -1,31 +1,34 @@
+import {Subject, takeUntil} from 'rxjs';
 import {DataConnection} from 'peerjs';
-import browser, {runtime} from 'webextension-polyfill';
+import {runtime} from 'webextension-polyfill';
 import {IExtentionConnection, PeerExtentionConnection} from 'browsertabs-remote-common/src/extention';
 
-import {TabMessageType, ConnectionStatus, ConnectionUpdatedTabMessage} from '../common/types';
-import {tabMessageTypeguard, ResponseFactory} from '../common/utils';
+import {TabMessageType, ConnectionStatus, ConnectionUpdatedTabMessage, TabMessage} from '../../common/types';
+import {ResponseFactory, Response} from '../../common/utils';
+import {createAction} from '../actions';
 
-class PeerConnection {
+import {MessageService} from './message-service';
+import {TabService} from './tab-service';
+
+export class PeerService {
   private _connection: IExtentionConnection | undefined = undefined;
   private _dataConnection: DataConnection | undefined = undefined;
+  private readonly _unsubscribeSubject$ = new Subject<void>();
 
-  constructor(private readonly _browser: browser.Browser) {
+  constructor(
+    private readonly _tabId: number,
+    private readonly _tabService: TabService,
+    private readonly _messageService: MessageService
+  ) {
+    _messageService.tabMessage$.pipe(
+      takeUntil(this._unsubscribeSubject$)
+    ).subscribe(this.onTabMessage)
   }
 
-  init(): void {
-    this._browser.runtime.onMessage.addListener(this.onMessage);
-  }
-
-  destroy(): void {
-    this._browser.runtime.onMessage.removeListener(this.onMessage);
+  dispose(): void {
     this._connection?.destroy();
-  }
-
-  private get tabInfo() {
-    return {
-      title: window.document.title,
-      favIconUrl: document.querySelector<HTMLLinkElement>('link[rel*=\'icon\']')?.href,
-    }
+    this._unsubscribeSubject$.next();
+    this._unsubscribeSubject$.complete();
   }
 
   private get connectionStatus(): ConnectionStatus {
@@ -36,12 +39,7 @@ class PeerConnection {
     return this._dataConnection ? ConnectionStatus.Connected : ConnectionStatus.Open;
   }
 
-  private readonly onMessage = (message, _sender, sendResponse): true | void => {
-    if (!tabMessageTypeguard(message)) {
-      // message is external. Do not need to handle
-      return;
-    }
-
+  private readonly onTabMessage = ([message, sendResponse]: [TabMessage, (value: Response<unknown>) => void]): true | undefined => {
     switch (message.type) {
     case TabMessageType.StartConnection:
       this.startConnection()
@@ -58,7 +56,8 @@ class PeerConnection {
         status: this.connectionStatus,
         peerId: this._connection?.peerId,
       })
-      return sendResponse(ResponseFactory.success());
+      sendResponse(ResponseFactory.success());
+      return;
     default:
       // do not need to handle other messages here
       return;
@@ -71,7 +70,7 @@ class PeerConnection {
         return resolve();
       }
 
-      this._connection = new PeerExtentionConnection(this.tabInfo);
+      this._connection = new PeerExtentionConnection(this._tabService.getTabInfo());
 
       this._connection.open$.subscribe((peerId) => {
         sendConnectionUpdatedMessage({
@@ -104,7 +103,9 @@ class PeerConnection {
       });
 
       this._connection.action$.subscribe((action) => {
-        console.log('Action$', action)
+        const actionCommand = createAction(action, this._messageService);
+
+        actionCommand.run();
       });
     })
   }
@@ -119,10 +120,7 @@ class PeerConnection {
       resolve();
     })
   }
-
 }
-
-export const peerConnection = new PeerConnection(browser);
 
 function sendConnectionUpdatedMessage(message: Omit<ConnectionUpdatedTabMessage, 'type'>): void {
   runtime.sendMessage({

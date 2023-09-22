@@ -1,4 +1,20 @@
-import {peerConnection} from './peer'
-console.log('Run Content Script!');
+import browser from 'webextension-polyfill';
 
-peerConnection.init();
+import {MessageService, TabService, PeerService} from './services';
+
+start();
+
+function start() {
+  const messageService = new MessageService(browser);
+  const tabService = new TabService(messageService);
+
+  let peerService: PeerService | undefined = undefined;
+
+  tabService.tabId$.subscribe(tabId => {
+    if (peerService) {
+      peerService.dispose();
+    }
+
+    peerService = new PeerService(tabId, tabService, messageService)
+  })
+}
