@@ -1,3 +1,5 @@
+import {typeguard, isEnum} from '../utils'
+
 export enum TabMessageType {
   StartConnection = 'StartConnection',
   CloseConnection = 'CloseConnection',
@@ -43,3 +45,7 @@ export type TabMessageResponse = {
   [TabMessageType.RequestConnectionUpdated]: undefined;
   [TabMessageType.ConnectionUpdated]: undefined;
 };
+
+export const tabMessageTypeguard = typeguard<TabMessage>(
+  ['type', isEnum(TabMessageType)],
+);

@@ -2,8 +2,8 @@ import {runtime, tabs, Tabs, Runtime} from 'webextension-polyfill';
 import {fromEventPattern, Observable} from 'rxjs';
 import {filter, map} from 'rxjs/operators';
 
-import {TabMessage, TabMessageType, TabMessageResponse} from '../../common/types';
-import {isSomething, tabMessageTypeguard, Response, ResponseFactory} from '../../common/utils';
+import {TabMessage, tabMessageTypeguard} from '../../common/types';
+import {isSomething} from '../../common/utils';
 
 class TabsService {
   readonly tabMessage$: Observable<TabMessage & {tabId?: number}>;
@@ -27,17 +27,14 @@ class TabsService {
     return tabs.query({});
   }
 
-  async sendMessage<T extends TabMessageType>(
+  async sendMessage(
     tabId: number, 
     message: TabMessage
-  ): Promise<Response<TabMessageResponse[T]>> {
+  ): Promise<void> {
     try {
-      return await tabs.sendMessage(tabId, message);
+      await tabs.sendMessage(tabId, message);
     } catch (error) {
       console.error(tabId, error);
-      return ResponseFactory.fail({
-        message: 'Can not send message'
-      })
     }
   }
 

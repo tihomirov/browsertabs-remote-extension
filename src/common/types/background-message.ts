@@ -1,3 +1,5 @@
+import {typeguard, isEnum} from '../utils'
+
 export enum BackgroundMessageType {
   RequestTabId,
   ResponseTabId,
@@ -45,3 +47,8 @@ export type BackgroundMessage = RequestTabIdBackgroundMessage |
   SetZoomBackgroundMessage | 
   CloseTabBackgroundMessage | 
   ToggleMuteBackgroundMessage;
+
+export const backgroundMessageTypeguard = typeguard<BackgroundMessage>(
+  ['backgroundMessageType', isEnum(BackgroundMessageType)],
+);
+  

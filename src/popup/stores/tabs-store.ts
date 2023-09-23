@@ -2,7 +2,7 @@ import {makeObservable, observable, runInAction, computed} from 'mobx';
 import browser from 'webextension-polyfill';
 
 import {TabMessageType, ConnectionStatus} from '../../common/types';
-import {ResponseFactory, isSomething} from '../../common/utils';
+import {isSomething} from '../../common/utils';
 import {tabsService} from '../services';
 
 type TabStatus = Readonly<{
@@ -28,6 +28,7 @@ export class TabsStore {
 
     // TODO: unsubscribe
     tabsService.tabMessage$.subscribe(message => {
+      console.log('ON TAB MESSAGE', message)
       if (isSomething(message.tabId) && message.type === TabMessageType.ConnectionUpdated) {
         this._tabsStatus.set(message.tabId, {
           connection: message.status,
@@ -56,27 +57,18 @@ export class TabsStore {
 
   async startConnection(
     tabId: number
-  ): Promise<string | undefined> {
-    const response = await tabsService.sendMessage<TabMessageType.StartConnection>(tabId, {
+  ): Promise<void> {
+    await tabsService.sendMessage(tabId, {
       type: TabMessageType.StartConnection,
     });
-
-    if (ResponseFactory.isFail(response)) {
-      console.error(response.data.message)
-      return response.data.message;
-    }
   }
 
   async closeConnection(
     tabId: number
-  ): Promise<string | undefined> {
-    const response = await tabsService.sendMessage<TabMessageType.CloseConnection>(tabId, {
+  ): Promise<void> {
+    await tabsService.sendMessage(tabId, {
       type: TabMessageType.CloseConnection,
     });
-
-    if (ResponseFactory.isFail(response)) {
-      return response.data.message;
-    }
   }
 
   async reloadTab(tabId: number): Promise<void> {
@@ -95,13 +87,8 @@ export class TabsStore {
   }
 
   private async checkConnection(tabId: number): Promise<void> {
-    const response = await tabsService.sendMessage<TabMessageType.RequestConnectionUpdated>(tabId, {
+    await tabsService.sendMessage(tabId, {
       type: TabMessageType.RequestConnectionUpdated,
     });
-
-    if (ResponseFactory.isFail(response)) {
-      console.error(response.data.message)
-      return;
-    }
   }
 }

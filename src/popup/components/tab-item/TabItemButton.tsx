@@ -16,11 +16,7 @@ export const TabItemButton: FC<TabItemButtonProps> = ({tabId, connected, error})
   const {tabsStore} = useStores();
 
   const onDisconnect = useCallback(async () => {
-    const connectionError = await tabsStore.closeConnection(Number(tabId));
-
-    if (connectionError) {
-      console.error(connectionError);
-    }
+    await tabsStore.closeConnection(Number(tabId));
   }, [tabsStore, tabId])
 
   if (error) {

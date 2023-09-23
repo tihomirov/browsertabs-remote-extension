@@ -18,24 +18,14 @@ export const ConnectTab: FC = observer(() => {
   const {tabsStore} = useStores();
   const [qrDataUrl, setQrDataUrl] = useState<string | undefined>();
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
-  const [reloadTabButton, setReloadTabButton] = useState<boolean>(false);
+  // const [reloadTabButton, setReloadTabButton] = useState<boolean>(false);
   const tabsStatus = computed(() => isSomething(tabId) 
     ? tabsStore.getTabsStatus(Number(tabId)) 
     : undefined
   ).get();
 
   const sendStartConnection = useCallback(async () => {
-    const connectionError = await tabsStore.startConnection(Number(tabId));
-
-    if (connectionError) {
-      console.error(connectionError);
-      setErrorMessage(t('common:connect-tab-peer-id-error'));
-      setReloadTabButton(true);
-      return;
-    } else {
-      setErrorMessage(undefined);
-      setReloadTabButton(false);
-    }
+    await tabsStore.startConnection(Number(tabId));
   }, [tabsStore, tabId])
 
   const onReloadTabClick = useCallback(async () => {
@@ -45,11 +35,11 @@ export const ConnectTab: FC = observer(() => {
 
   useEffect(() => {
     const startConnection = () => sendStartConnection();
-    void startConnection();
+    startConnection();
   }, []);
 
   useEffect(() => {
-    if (tabsStatus?.connection === ConnectionStatus.Open && tabsStatus.peerId) {
+    if (tabsStatus?.peerId) {
       toDataURL(tabsStatus.peerId)
         .then(qr => setQrDataUrl(qr))
         .catch(() => setErrorMessage(t('common:connect-tab-qr-error')));
@@ -63,8 +53,9 @@ export const ConnectTab: FC = observer(() => {
       {tabsStatus?.peerId && <span className={s.tutorial}>{tabsStatus.peerId}</span>}
       <ConnectTabError
         message={errorMessage}
-        reloadTabButton={reloadTabButton}
         onReloadTabClick={onReloadTabClick}
+        reloadTabButton={false}
+        // reloadTabButton={reloadTabButton}
       />
       {qrDataUrl && <img src={qrDataUrl} />}
     </div>

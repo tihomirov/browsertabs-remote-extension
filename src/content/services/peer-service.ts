@@ -4,7 +4,6 @@ import {runtime} from 'webextension-polyfill';
 import {IExtentionConnection, PeerExtentionConnection} from 'browsertabs-remote-common/src/extention';
 
 import {TabMessageType, ConnectionStatus, ConnectionUpdatedTabMessage, TabMessage} from '../../common/types';
-import {ResponseFactory, Response} from '../../common/utils';
 import {createAction} from '../actions';
 
 import {MessageService} from './message-service';
@@ -39,24 +38,19 @@ export class PeerService {
     return this._dataConnection ? ConnectionStatus.Connected : ConnectionStatus.Open;
   }
 
-  private readonly onTabMessage = ([message, sendResponse]: [TabMessage, (value: Response<unknown>) => void]): true | undefined => {
+  private readonly onTabMessage = (message: TabMessage): void => {
     switch (message.type) {
     case TabMessageType.StartConnection:
-      this.startConnection()
-        .then(() => sendResponse(ResponseFactory.success()))
-        .catch(error => sendResponse(ResponseFactory.fail({message: error.message})));
-      return true;
+      this.startConnection();
+      return;
     case TabMessageType.CloseConnection:
-      this.closeConnection()
-        .then(() => sendResponse(ResponseFactory.success()))
-        .catch(error => sendResponse(ResponseFactory.fail({message: error.message})));
-      return true;
+      this.closeConnection();
+      return 
     case TabMessageType.RequestConnectionUpdated:
       sendConnectionUpdatedMessage({
         status: this.connectionStatus,
         peerId: this._connection?.peerId,
       })
-      sendResponse(ResponseFactory.success());
       return;
     default:
       // do not need to handle other messages here

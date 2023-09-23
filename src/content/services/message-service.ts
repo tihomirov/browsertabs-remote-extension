@@ -1,13 +1,10 @@
 import {Observable, Subject} from 'rxjs';
 import browser from 'webextension-polyfill';
 
-import {BackgroundMessage, TabMessage} from '../../common/types';
-import {tabMessageTypeguard, backgroundMessageTypeguard} from '../../common/utils';
-
-type SendResponse = (value: unknown) => void;
+import {BackgroundMessage, TabMessage, tabMessageTypeguard, backgroundMessageTypeguard} from '../../common/types';
 
 export class MessageService {
-  private readonly _tabMessage$ = new Subject<[TabMessage, SendResponse]>();
+  private readonly _tabMessage$ = new Subject<TabMessage>();
   private readonly _backgroundMessage$ = new Subject<BackgroundMessage>();
 
   constructor(private readonly _browser: browser.Browser) {
@@ -26,7 +23,7 @@ export class MessageService {
     this._browser.runtime.sendMessage(message);
   }
 
-  get tabMessage$(): Observable<[TabMessage, SendResponse]> {
+  get tabMessage$(): Observable<TabMessage> {
     return this._tabMessage$;
   }
 
@@ -34,9 +31,9 @@ export class MessageService {
     return this._backgroundMessage$;
   }
 
-  private readonly onMessage = (message, _sender, sendResponse): true | void => {
+  private readonly onMessage = (message: unknown): true | void => {
     if (tabMessageTypeguard(message)) {
-      return this._tabMessage$.next([message, sendResponse]);
+      return this._tabMessage$.next(message);
     }
 
     if (backgroundMessageTypeguard(message)) {

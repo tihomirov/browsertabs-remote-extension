@@ -1,7 +1,6 @@
 import {runtime, tabs} from 'webextension-polyfill';
 
-import {backgroundMessageTypeguard} from './common/utils';
-import {BackgroundMessage, BackgroundMessageType} from './common/types';
+import {BackgroundMessage, BackgroundMessageType, backgroundMessageTypeguard} from './common/types';
 
 const ZOOM_STEP = 0.1;
 
