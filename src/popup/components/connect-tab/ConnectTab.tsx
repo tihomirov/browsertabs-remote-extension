@@ -35,7 +35,10 @@ export const ConnectTab: FC = observer(() => {
 
   useEffect(() => {
     const startConnection = () => sendStartConnection();
-    startConnection();
+
+    if (tabsStatus?.connection === ConnectionStatus.Closed) {
+      startConnection();
+    }
   }, []);
 
   useEffect(() => {

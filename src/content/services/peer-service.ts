@@ -1,9 +1,8 @@
 import {Subject, takeUntil} from 'rxjs';
 import {DataConnection} from 'peerjs';
-import {runtime} from 'webextension-polyfill';
 import {IExtentionConnection, PeerExtentionConnection} from 'browsertabs-remote-common/src/extention';
 
-import {TabMessageType, ConnectionStatus, ConnectionUpdatedTabMessage, TabMessage} from '../../common/types';
+import {PopupMessageType, ConnectionStatus, ConnectionUpdatedPopupMessage, PopupMessage} from '../../common/types';
 import {createAction} from '../actions';
 
 import {MessageService} from './message-service';
@@ -31,23 +30,23 @@ export class PeerService {
   }
 
   private get connectionStatus(): ConnectionStatus {
-    if (!this._dataConnection || !this._connection) {
+    if (!this._connection) {
       return ConnectionStatus.Closed;
     }
 
     return this._dataConnection ? ConnectionStatus.Connected : ConnectionStatus.Open;
   }
 
-  private readonly onTabMessage = (message: TabMessage): void => {
-    switch (message.type) {
-    case TabMessageType.StartConnection:
+  private readonly onTabMessage = (message: PopupMessage): void => {
+    switch (message.popupMessagetype) {
+    case PopupMessageType.StartConnection:
       this.startConnection();
       return;
-    case TabMessageType.CloseConnection:
+    case PopupMessageType.CloseConnection:
       this.closeConnection();
       return 
-    case TabMessageType.RequestConnectionUpdated:
-      sendConnectionUpdatedMessage({
+    case PopupMessageType.RequestConnectionUpdated:
+      this.sendConnectionUpdatedMessage({
         status: this.connectionStatus,
         peerId: this._connection?.peerId,
       })
@@ -59,6 +58,7 @@ export class PeerService {
   }
 
   private async startConnection(): Promise<void> {
+    console.log('START CONNECTION');
     return new Promise((resolve, reject) => {
       if (this._connection) {
         return resolve();
@@ -67,7 +67,8 @@ export class PeerService {
       this._connection = new PeerExtentionConnection(this._tabService.getTabInfo());
 
       this._connection.open$.subscribe((peerId) => {
-        sendConnectionUpdatedMessage({
+        console.log('START open$.subscribe');
+        this.sendConnectionUpdatedMessage({
           status: ConnectionStatus.Open,
           peerId,
         });
@@ -75,7 +76,7 @@ export class PeerService {
       });
 
       this._connection.error$.subscribe((error) => {
-        sendConnectionUpdatedMessage({
+        this.sendConnectionUpdatedMessage({
           status: ConnectionStatus.Error,
           error,
         });
@@ -83,7 +84,8 @@ export class PeerService {
       });
 
       this._connection.connected$.subscribe((connection: DataConnection) => {
-        sendConnectionUpdatedMessage({
+        console.log('START connected$.subscribe');
+        this.sendConnectionUpdatedMessage({
           status: ConnectionStatus.Connected,
           peerId: this._connection?.peerId,
         });
@@ -93,7 +95,9 @@ export class PeerService {
 
       this._connection.close$.subscribe(() => {
         this._dataConnection = undefined;
-        sendConnectionUpdatedMessage({status: ConnectionStatus.Closed});
+        this.sendConnectionUpdatedMessage({
+          status: ConnectionStatus.Closed
+        });
       });
 
       this._connection.action$.subscribe((action) => {
@@ -114,11 +118,11 @@ export class PeerService {
       resolve();
     })
   }
-}
 
-function sendConnectionUpdatedMessage(message: Omit<ConnectionUpdatedTabMessage, 'type'>): void {
-  runtime.sendMessage({
-    type: TabMessageType.ConnectionUpdated,
-    ...message,
-  });
+  private sendConnectionUpdatedMessage(message: Omit<ConnectionUpdatedPopupMessage, 'popupMessagetype'>): void {
+    this._messageService.sendPopupMessage({
+      popupMessagetype: PopupMessageType.ConnectionUpdated,
+      ...message
+    });
+  }
 }

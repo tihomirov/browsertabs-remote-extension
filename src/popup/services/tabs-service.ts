@@ -2,11 +2,11 @@ import {runtime, tabs, Tabs, Runtime} from 'webextension-polyfill';
 import {fromEventPattern, Observable} from 'rxjs';
 import {filter, map} from 'rxjs/operators';
 
-import {TabMessage, tabMessageTypeguard} from '../../common/types';
+import {PopupMessage, popupMessageTypeguard} from '../../common/types';
 import {isSomething} from '../../common/utils';
 
 class TabsService {
-  readonly tabMessage$: Observable<TabMessage & {tabId?: number}>;
+  readonly tabMessage$: Observable<PopupMessage & {tabId?: number}>;
 
   constructor() {
     this.tabMessage$ = fromEventPattern(
@@ -15,7 +15,7 @@ class TabsService {
       (request, sender: Runtime.MessageSender, sendResponse) => ({request, sender, sendResponse})
     ).pipe(
       map(({request, sender}) => 
-        tabMessageTypeguard(request)
+        popupMessageTypeguard(request)
           ? {...request, tabId: sender.tab?.id}
           : undefined
       ),
@@ -29,7 +29,7 @@ class TabsService {
 
   async sendMessage(
     tabId: number, 
-    message: TabMessage
+    message: PopupMessage
   ): Promise<void> {
     try {
       await tabs.sendMessage(tabId, message);

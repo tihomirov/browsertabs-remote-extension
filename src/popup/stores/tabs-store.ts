@@ -1,7 +1,7 @@
 import {makeObservable, observable, runInAction, computed} from 'mobx';
 import browser from 'webextension-polyfill';
 
-import {TabMessageType, ConnectionStatus} from '../../common/types';
+import {PopupMessageType, ConnectionStatus} from '../../common/types';
 import {isSomething} from '../../common/utils';
 import {tabsService} from '../services';
 
@@ -29,7 +29,7 @@ export class TabsStore {
     // TODO: unsubscribe
     tabsService.tabMessage$.subscribe(message => {
       console.log('ON TAB MESSAGE', message)
-      if (isSomething(message.tabId) && message.type === TabMessageType.ConnectionUpdated) {
+      if (isSomething(message.tabId) && message.popupMessagetype === PopupMessageType.ConnectionUpdated) {
         this._tabsStatus.set(message.tabId, {
           connection: message.status,
           peerId: message.peerId,
@@ -59,7 +59,7 @@ export class TabsStore {
     tabId: number
   ): Promise<void> {
     await tabsService.sendMessage(tabId, {
-      type: TabMessageType.StartConnection,
+      popupMessagetype: PopupMessageType.StartConnection,
     });
   }
 
@@ -67,7 +67,7 @@ export class TabsStore {
     tabId: number
   ): Promise<void> {
     await tabsService.sendMessage(tabId, {
-      type: TabMessageType.CloseConnection,
+      popupMessagetype: PopupMessageType.CloseConnection,
     });
   }
 
@@ -88,7 +88,7 @@ export class TabsStore {
 
   private async checkConnection(tabId: number): Promise<void> {
     await tabsService.sendMessage(tabId, {
-      type: TabMessageType.RequestConnectionUpdated,
+      popupMessagetype: PopupMessageType.RequestConnectionUpdated,
     });
   }
 }
