@@ -21,7 +21,7 @@
 		"extends": "stylelint-config-standard-scss"
 	},
 	"dependencies": {
-    "browsertabs-remote-common": "git@github.com:tihomirov/browsertabs-remote-common.git#6a910dc52d0f87050df19ea90f3fd6dd704e4c63",
+		"browsertabs-remote-common": "git@github.com:tihomirov/browsertabs-remote-common.git#6a910dc52d0f87050df19ea90f3fd6dd704e4c63",
 		"classnames": "^2.3.2",
 		"i18next": "^23.2.11",
 		"i18next-browser-languagedetector": "^7.1.0",
@@ -32,6 +32,7 @@
 		"react-dom": "^18.2.0",
 		"react-i18next": "^13.0.2",
 		"react-router-dom": "^6.14.1",
+		"reset-css": "^5.0.2",
 		"rxjs": "^7.8.1",
 		"webextension-polyfill": "^0.10.0"
 	},

@@ -5,7 +5,7 @@ import {Root, Tabs, ConnectTab} from './routes';
 import {ErrorPage} from './ErrorPage';
 import {RootStore, StoreProvider} from './stores';
 
-import * as s from './styles.module.scss';
+import './styles.module.scss';
 
 const rootStore = new RootStore();
 
@@ -33,8 +33,6 @@ const router = createMemoryRouter([
 
 export const App: FC = () => (
   <StoreProvider store={rootStore}>
-    <div className={s.app}>
-      <RouterProvider router={router} />
-    </div>
+    <RouterProvider router={router} />
   </StoreProvider>
 );

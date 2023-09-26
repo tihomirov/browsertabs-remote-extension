@@ -1,8 +1,9 @@
-.app {
-	position: relative;
-	display: flex;
-	overflow: hidden;
-	width: 402px;
-	min-height: 250px;
-	max-height: 350px;
+@import 'reset-css/reset.css';
+
+:root {
+	body {
+		width: 500px;
+		height: 375px;
+		overflow: hidden;
+	}
 }
