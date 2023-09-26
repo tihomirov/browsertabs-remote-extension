@@ -1,17 +1,24 @@
-import React, {FC} from 'react';
+import React, {FC, useCallback} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
-
-import * as s from './styles.module.scss';
+import {TopAppBar, TopAppBarRow, TopAppBarSection, TopAppBarNavigationIcon, TopAppBarTitle} from '@rmwc/top-app-bar';
 
 export const Header: FC = () => {
   const {t} = useTranslation();
   const navigate = useNavigate();
 
+  const navigateToHome = useCallback(() => {
+    navigate('/');
+  }, [navigate])
+
   return (
-    <div className={s.header}>
-      <div onClick={() => navigate(-1)}>Back</div>
-      <h1>{t('common:header-title')}</h1>
-    </div>
+    <TopAppBar fixed>
+      <TopAppBarRow>
+        <TopAppBarSection>
+          <TopAppBarNavigationIcon icon="first_page" onClick={navigateToHome}/>
+          <TopAppBarTitle>{t('common:header-title')}</TopAppBarTitle>
+        </TopAppBarSection>
+      </TopAppBarRow>
+    </TopAppBar>
   );
 };
