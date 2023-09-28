@@ -18,6 +18,8 @@ const defaultTabStatus: TabStatus = {
 export class TabsStore {
   @observable
   private _tabs: browser.Tabs.Tab[] | undefined = undefined;
+  @observable
+  private _currentTab: browser.Tabs.Tab | undefined = undefined;
   private readonly _tabsStatus = observable.map<number, TabStatus>();
 
   @observable
@@ -28,7 +30,6 @@ export class TabsStore {
 
     // TODO: unsubscribe
     tabsService.tabMessage$.subscribe(message => {
-      console.log('ON TAB MESSAGE', message)
       if (isSomething(message.tabId) && message.popupMessagetype === PopupMessageType.ConnectionUpdated) {
         this._tabsStatus.set(message.tabId, {
           connection: message.status,
@@ -47,8 +48,27 @@ export class TabsStore {
   }
 
   @computed
+  get currentTab(): browser.Tabs.Tab | undefined {
+    return this._currentTab;
+  }
+
+  @computed
   get loading(): boolean {
     return this._loading;
+  }
+
+  setCurrentTabId(tabId: number): void {
+    const tab = this._tabs?.find(t => t.id === tabId);
+
+    runInAction(() => {
+      this._currentTab = tab;
+    });
+  }
+
+  clearCurrentTab(): void {
+    runInAction(() => {
+      this._currentTab = undefined;
+    });
   }
 
   getTabsStatus(tabId: number): TabStatus {
