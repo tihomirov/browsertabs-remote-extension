@@ -21,8 +21,11 @@
 		"extends": "stylelint-config-standard-scss"
 	},
 	"dependencies": {
+		"@rmwc/circular-progress": "^8.0.8",
 		"@rmwc/grid": "^8.0.8",
 		"@rmwc/icon": "^8.0.8",
+		"@rmwc/list": "^8.0.8",
+		"@rmwc/tooltip": "^8.0.8",
 		"@rmwc/top-app-bar": "^8.0.8",
 		"browsertabs-remote-common": "git@github.com:tihomirov/browsertabs-remote-common.git#6a910dc52d0f87050df19ea90f3fd6dd704e4c63",
 		"classnames": "^2.3.2",

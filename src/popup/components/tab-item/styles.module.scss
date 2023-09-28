@@ -1,16 +1,7 @@
-.tab {
-	display: flex;
-	flex-wrap: nowrap;
-	align-content: center;
-	justify-content: space-around;
-	align-items: center;
-	gap: 6px;
-	padding: 6px 0;
-	border-bottom: 2px solid gray;
-}
-
-.status {
-	color: gray;
+.statusIcon {
+	&.closed {
+		color: gray;
+	}
 
 	&.connected {
 		color: greenyellow;
@@ -24,14 +15,3 @@
 		color: red;
 	}
 }
-
-.title {
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	overflow: hidden;
-}
-
-.button {
-	margin-left: auto;
-}
-
