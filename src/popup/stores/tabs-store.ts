@@ -14,9 +14,9 @@ export type Tab = {
 
 export class TabsStore {
   @observable
-  private _currentTab: Tab | undefined = undefined;
-  @observable
   private _loading = true;
+  @observable
+  private _currentTabId: number | undefined = undefined;
   private readonly _tabs = observable.array<Tab>([]);
 
   constructor() {
@@ -25,12 +25,15 @@ export class TabsStore {
     // TODO: unsubscribe
     tabsService.tabMessage$.subscribe(message => {
       if (isSomething(message.tabId) && message.popupMessagetype === PopupMessageType.ConnectionUpdated) {
-        const tabInfo = this.getTabInfoById(message.tabId);
+        const index = this._tabs.findIndex(({tab}) => tab.id === message.tabId);
 
-        if (tabInfo) {
-          tabInfo.status = message.status;
-          tabInfo.peerId = message.peerId;
-          tabInfo.error = message.error;
+        if (isSomething(index)) {
+          this._tabs[index] = {
+            tab: this._tabs[index].tab,
+            status: message.status,
+            peerId: message.peerId,
+            error: message.error,
+          }
         }
       }
     })
@@ -45,7 +48,11 @@ export class TabsStore {
 
   @computed
   get currentTab(): Tab | undefined {
-    return this._currentTab;
+    if (!this._currentTabId) {
+      return undefined;
+    }
+
+    return this._tabs.find(tab => tab.tab.id === this._currentTabId);
   }
 
   @computed
@@ -54,17 +61,11 @@ export class TabsStore {
   }
 
   setCurrentTabId(tabId: number): void {
-    const tab = this._tabs?.find((tab) => tab.tab.id === tabId);
-
-    runInAction(() => {
-      this._currentTab = tab;
-    });
+    runInAction(() => this._currentTabId = tabId);
   }
 
   clearCurrentTab(): void {
-    runInAction(() => {
-      this._currentTab = undefined;
-    });
+    runInAction(() => this._currentTabId = undefined);
   }
 
   async startConnection(
@@ -85,10 +86,6 @@ export class TabsStore {
 
   async reloadTab(tabId: number): Promise<void> {
     return await tabsService.reloadTab(tabId);
-  }
-
-  private getTabInfoById(id: number): Tab | undefined {
-    return this._tabs.find(({tab}) => tab.id === id)
   }
 
   private async fetchTabs(): Promise<void> {

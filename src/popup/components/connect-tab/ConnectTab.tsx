@@ -4,51 +4,53 @@ import {toDataURL} from 'qrcode';
 
 import {ConnectionStatus} from '../../../common/types';
 import {useStores} from '../../hooks';
-import {Tab} from '../../stores/tabs-store';
 
 import {ConnectTabError} from './ConnectTabError';
 import * as s from './styles.module.scss';
 
 type ConnectTabProps = Readonly<{
-  tab: Readonly<Tab>;
+  tabId: number;
+  status: ConnectionStatus;
+  peerId?: string; 
+  error?: string
 }>;
 
-export const ConnectTab: FC<ConnectTabProps> = ({tab}) => {
+export const ConnectTab: FC<ConnectTabProps> = ({tabId, status, peerId}) => {
   const {t} = useTranslation();
   const {tabsStore} = useStores();
   const [qrDataUrl, setQrDataUrl] = useState<string | undefined>();
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
 
   const sendStartConnection = useCallback(async () => {
-    await tabsStore.startConnection(tab.tab.id);
-  }, [tabsStore, tab])
+    await tabsStore.startConnection(tabId);
+  }, [tabsStore, tabId])
 
   const onReloadTabClick = useCallback(async () => {
-    await tabsStore.reloadTab(tab.tab.id);
+    await tabsStore.reloadTab(tabId);
     await sendStartConnection();
-  }, [sendStartConnection, tabsStore, tab])
+  }, [sendStartConnection, tabsStore, tabId])
 
   useEffect(() => {
     const startConnection = () => sendStartConnection();
 
-    if (tab.status === ConnectionStatus.Closed) {
+    if (status === ConnectionStatus.Closed) {
       startConnection();
     }
   }, []);
 
   useEffect(() => {
-    if (tab.peerId) {
-      toDataURL(tab.peerId)
+    if (peerId) {
+      toDataURL(peerId)
         .then(qr => setQrDataUrl(qr))
         .catch(() => setErrorMessage(t('common:connect-tab-qr-error')));
     }
-  }, [tab.peerId]);
+  }, [peerId]);
 
   return (
     <div className={s.container}>
       <span className={s.tutorial}>{t('common:connect-tab-qr-tutorial')}</span>
-      {tab.status === ConnectionStatus.Connected && <span>OK!!!!!!!!!</span>}
-      {tab.peerId && <span className={s.tutorial}>{tab.peerId}</span>}
+      {status === ConnectionStatus.Connected && <span>OK!!!!!!!!!</span>}
+      {peerId && <span className={s.tutorial}>{peerId}</span>}
       <ConnectTabError
         message={errorMessage}
         onReloadTabClick={onReloadTabClick}

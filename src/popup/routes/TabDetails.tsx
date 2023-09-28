@@ -9,6 +9,7 @@ import {Loader} from '../components/loader';
 export const TabDetails: FC = observer(() => {
   const {tabsStore} = useStores();
   const {tabId} = useParams();
+  const tab = tabsStore.currentTab;
 
   useEffect(() => {
     if (tabId) {
@@ -18,11 +19,16 @@ export const TabDetails: FC = observer(() => {
     return () => tabsStore.clearCurrentTab();
   }, [tabId])
 
-  if (!tabsStore.currentTab) {
+  if (!tab) {
     return <Loader size="xlarge" />
   }
 
   return (
-    <ConnectTab tab={tabsStore.currentTab}/>
+    <ConnectTab 
+      tabId={tab.tab.id}
+      status={tab.status}
+      peerId={tab.peerId}
+      error={tab.error}
+    />
   )
 });
