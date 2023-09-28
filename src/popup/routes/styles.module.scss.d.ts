@@ -1,1 +1,1 @@
-export declare const outletContainer: string;
+export declare const container: string;
