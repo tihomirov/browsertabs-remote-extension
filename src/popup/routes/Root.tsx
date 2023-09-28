@@ -10,7 +10,9 @@ export const Root: FC = () => {
   return (
     <div className={s.container} ref={setScrollTarget}>
       {scrollTarget && <Header scrollTarget={scrollTarget}/>}
-      <Outlet />
+      <div className={s.outletContainer}>
+        <Outlet />
+      </div>
     </div>
   );
 };

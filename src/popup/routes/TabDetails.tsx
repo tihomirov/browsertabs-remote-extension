@@ -1,10 +1,12 @@
 import React, {FC, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
+import {observer} from 'mobx-react-lite';
 
-import {ConnectTab as ConnectTabComponent} from '../components/connect-tab';
+import {ConnectTab} from '../components/connect-tab';
 import {useStores} from '../hooks';
+import {Loader} from '../components/loader';
 
-export const ConnectTab: FC = () => {
+export const TabDetails: FC = observer(() => {
   const {tabsStore} = useStores();
   const {tabId} = useParams();
 
@@ -16,7 +18,11 @@ export const ConnectTab: FC = () => {
     return () => tabsStore.clearCurrentTab();
   }, [tabId])
 
+  if (!tabsStore.currentTab) {
+    return <Loader size="xlarge" />
+  }
+
   return (
-    <ConnectTabComponent/>
+    <ConnectTab tab={tabsStore.currentTab}/>
   )
-};
+});

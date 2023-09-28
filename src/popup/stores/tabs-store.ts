@@ -1,29 +1,23 @@
 import {makeObservable, observable, runInAction, computed} from 'mobx';
-import browser from 'webextension-polyfill';
+import {Tabs} from 'webextension-polyfill';
 
 import {PopupMessageType, ConnectionStatus} from '../../common/types';
 import {isSomething} from '../../common/utils';
 import {tabsService} from '../services';
 
-type TabStatus = Readonly<{
-  connection: ConnectionStatus;
+export type Tab = {
+  tab: Tabs.Tab & Required<Pick<Tabs.Tab, 'id'>>;
+  status: ConnectionStatus;
   peerId?: string; 
   error?: string
-}>;
-
-const defaultTabStatus: TabStatus = {
-  connection: ConnectionStatus.Closed,
-}
+};
 
 export class TabsStore {
   @observable
-  private _tabs: browser.Tabs.Tab[] | undefined = undefined;
-  @observable
-  private _currentTab: browser.Tabs.Tab | undefined = undefined;
-  private readonly _tabsStatus = observable.map<number, TabStatus>();
-
+  private _currentTab: Tab | undefined = undefined;
   @observable
   private _loading = true;
+  private readonly _tabs = observable.array<Tab>([]);
 
   constructor() {
     makeObservable(this);
@@ -31,11 +25,13 @@ export class TabsStore {
     // TODO: unsubscribe
     tabsService.tabMessage$.subscribe(message => {
       if (isSomething(message.tabId) && message.popupMessagetype === PopupMessageType.ConnectionUpdated) {
-        this._tabsStatus.set(message.tabId, {
-          connection: message.status,
-          peerId: message.peerId,
-          error: message.error,
-        })
+        const tabInfo = this.getTabInfoById(message.tabId);
+
+        if (tabInfo) {
+          tabInfo.status = message.status;
+          tabInfo.peerId = message.peerId;
+          tabInfo.error = message.error;
+        }
       }
     })
     
@@ -43,12 +39,12 @@ export class TabsStore {
   }
 
   @computed
-  get tabs(): browser.Tabs.Tab[] | undefined {
+  get tabs(): ReadonlyArray<Tab> {
     return this._tabs;
   }
 
   @computed
-  get currentTab(): browser.Tabs.Tab | undefined {
+  get currentTab(): Tab | undefined {
     return this._currentTab;
   }
 
@@ -58,7 +54,7 @@ export class TabsStore {
   }
 
   setCurrentTabId(tabId: number): void {
-    const tab = this._tabs?.find(t => t.id === tabId);
+    const tab = this._tabs?.find((tab) => tab.tab.id === tabId);
 
     runInAction(() => {
       this._currentTab = tab;
@@ -69,10 +65,6 @@ export class TabsStore {
     runInAction(() => {
       this._currentTab = undefined;
     });
-  }
-
-  getTabsStatus(tabId: number): TabStatus {
-    return this._tabsStatus.get(tabId) ?? defaultTabStatus;
   }
 
   async startConnection(
@@ -95,15 +87,24 @@ export class TabsStore {
     return await tabsService.reloadTab(tabId);
   }
 
+  private getTabInfoById(id: number): Tab | undefined {
+    return this._tabs.find(({tab}) => tab.id === id)
+  }
+
   private async fetchTabs(): Promise<void> {
     const tabs = await tabsService.getTabs();
-
-    tabs.forEach(tab => isSomething(tab.id) && this.checkConnection(tab.id))
+    const tabsWithId = tabs.filter(tab => tab.id) as Array<Tabs.Tab & Required<Pick<Tabs.Tab, 'id'>>>;
 
     runInAction(() => {
-      this._tabs = tabs;
+      this._tabs.replace(
+        tabsWithId.map(tab => ({
+          tab,
+          status: ConnectionStatus.Closed
+        })));
       this._loading = false;
     });
+
+    tabsWithId.forEach(tab => this.checkConnection(tab.id))
   }
 
   private async checkConnection(tabId: number): Promise<void> {

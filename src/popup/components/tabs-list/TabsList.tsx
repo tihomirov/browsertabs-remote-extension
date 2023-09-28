@@ -15,13 +15,13 @@ export const TabsList: FC = observer(() => {
     return <Loader size="xlarge"/>;
   }
 
-  if (!tabsStore.tabs?.length) {
+  if (tabsStore.tabs.length === 0) {
     return <div>{t('common:no-tabs-to-connect')}</div>;
   }
 
   return (
     <List>
-      {tabsStore.tabs.map(tab => <TabItem key={tab.id} tab={tab} />)}
+      {tabsStore.tabs.map(tab => <TabItem key={tab.tab.id} tab={tab} />)}
     </List>
   );
 });
