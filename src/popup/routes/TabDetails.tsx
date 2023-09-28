@@ -1,8 +1,10 @@
 import React, {FC, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
+import {Grid, GridRow, GridCell} from '@rmwc/grid';
 
 import {ConnectTab} from '../components/connect-tab';
+import {TabStatus} from '../components/tab-status';
 import {useStores} from '../hooks';
 import {Loader} from '../components/loader';
 
@@ -24,11 +26,18 @@ export const TabDetails: FC = observer(() => {
   }
 
   return (
-    <ConnectTab 
-      tabId={tab.tab.id}
-      status={tab.status}
-      peerId={tab.peerId}
-      error={tab.error}
-    />
+    <Grid>
+      <GridRow>
+        <GridCell span={12}>
+          <TabStatus status={tab.status} />
+        </GridCell>
+      </GridRow>
+      <ConnectTab 
+        tabId={tab.tab.id}
+        status={tab.status}
+        peerId={tab.peerId}
+        error={tab.error}
+      />
+    </Grid>
   )
 });

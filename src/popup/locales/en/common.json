@@ -6,5 +6,10 @@
   "tab-button-reconnect": "Reconnect",
   "connect-tab-qr-tutorial": "Scan this QR code from your mobile App",
   "connect-tab-qr-error": "Can not generate QR code. Please try again manually",
-  "connect-tab-peer-id-error": "Can not fetch data to create connection"
+  "connect-tab-peer-id-error": "Can not fetch data to create connection",
+  "connection-status": "Connection Status",
+  "connection-status-closed": "Closed",
+  "connection-status-open": "Open",
+  "connection-status-connected": "Connected",
+  "connection-status-error": "Error"
 }
