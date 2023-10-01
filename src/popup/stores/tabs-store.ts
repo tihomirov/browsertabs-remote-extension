@@ -2,8 +2,7 @@ import {makeObservable, observable, runInAction, computed} from 'mobx';
 import {Tabs} from 'webextension-polyfill';
 
 import {PopupMessageType, ConnectionStatus} from '../../common/types';
-import {isSomething} from '../../common/utils';
-import {tabsService} from '../services';
+import {tabsService, storageService} from '../services';
 
 export type Tab = {
   tab: Tabs.Tab & Required<Pick<Tabs.Tab, 'id'>>;
@@ -23,19 +22,8 @@ export class TabsStore {
     makeObservable(this);
 
     // TODO: unsubscribe
-    tabsService.tabMessage$.subscribe(message => {
-      if (isSomething(message.tabId) && message.popupMessagetype === PopupMessageType.ConnectionUpdated) {
-        const index = this._tabs.findIndex(({tab}) => tab.id === message.tabId);
-
-        if (isSomething(index)) {
-          runInAction(() => this._tabs[index] = {
-            tab: this._tabs[index].tab,
-            status: message.status,
-            peerId: message.peerId,
-            error: message.error,
-          });
-        }
-      }
+    storageService.connectionUpdate$.subscribe(({tabId, update}) => {
+      this.updateTabStatus(tabId, update);
     })
     
     void this.fetchTabs();
@@ -89,24 +77,47 @@ export class TabsStore {
   }
 
   private async fetchTabs(): Promise<void> {
-    const tabs = await tabsService.getTabs();
+    const [tabs, connectionsStatus] = await Promise.all([
+      tabsService.getTabs(),
+      storageService.getConnectionsStatus(),
+    ]);
+
     const tabsWithId = tabs.filter(tab => tab.id) as Array<Tabs.Tab & Required<Pick<Tabs.Tab, 'id'>>>;
 
     runInAction(() => {
       this._tabs.replace(
-        tabsWithId.map(tab => ({
-          tab,
-          status: ConnectionStatus.Closed
-        })));
+        tabsWithId.map(tab => {
+          const tabStatus = connectionsStatus?.[tab.id] ?? {
+            status: ConnectionStatus.Closed
+          }
+
+          return {
+            tab,
+            ...tabStatus,
+          }
+        }));
       this._loading = false;
     });
-
-    tabsWithId.forEach(tab => this.checkConnection(tab.id))
   }
 
-  private async checkConnection(tabId: number): Promise<void> {
-    await tabsService.sendMessage(tabId, {
-      popupMessagetype: PopupMessageType.RequestConnectionUpdated,
+  private updateTabStatus(tabId: number, update: Omit<Tab, 'tab'>): void {
+    const index = this._tabs.findIndex(({tab}) => tab.id === tabId);
+    const tab = this._tabs[index];
+
+    if (!tab || this.isTabStatusEqual(tab, update)) {
+      return;
+    }
+
+    runInAction(() => this._tabs[index] = {
+      tab: this._tabs[index].tab,
+      status: update.status,
+      peerId: update.peerId,
+      error: update.error,
     });
   }
+
+  private isTabStatusEqual(tab1: Omit<Tab, 'tab'>, tab2: Omit<Tab, 'tab'>): boolean {
+    return tab1.status === tab2.status && tab1.peerId === tab2.peerId && tab1.error === tab2.error;
+  }
+
 }

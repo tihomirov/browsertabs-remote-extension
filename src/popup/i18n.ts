@@ -28,10 +28,6 @@ i18n
     interpolation: {
       escapeValue: false, // not needed for react as it escapes by default
     },
-  }).then(() => {
-    console.log('i18next successfully inited');
-  }).catch(error => {
-    console.log('i18next failed', error);
   });
 
 export default i18n;

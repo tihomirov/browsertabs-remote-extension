@@ -29,7 +29,7 @@
 		"@rmwc/tooltip": "^8.0.8",
 		"@rmwc/top-app-bar": "^8.0.8",
 		"@rmwc/typography": "^8.0.8",
-		"browsertabs-remote-common": "git@github.com:tihomirov/browsertabs-remote-common.git#6a910dc52d0f87050df19ea90f3fd6dd704e4c63",
+		"browsertabs-remote-common": "git@github.com:tihomirov/browsertabs-remote-common.git#db7ba7a0382934322ac1bc3243d340c22df5e783",
 		"classnames": "^2.3.2",
 		"i18next": "^23.2.11",
 		"i18next-browser-languagedetector": "^7.1.0",

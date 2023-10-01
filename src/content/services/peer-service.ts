@@ -2,7 +2,8 @@ import {Subject, takeUntil} from 'rxjs';
 import {DataConnection} from 'peerjs';
 import {IExtentionConnection, PeerExtentionConnection} from 'browsertabs-remote-common/src/extention';
 
-import {PopupMessageType, ConnectionStatus, ConnectionUpdatedPopupMessage, PopupMessage} from '../../common/types';
+import {PopupMessageType, ConnectionStatus, ConnectionUpdate, PopupMessage} from '../../common/types';
+import {StorageService} from '../../common/services';
 import {createAction} from '../actions';
 
 import {MessageService} from './message-service';
@@ -16,11 +17,17 @@ export class PeerService {
   constructor(
     private readonly _tabId: number,
     private readonly _tabService: TabService,
-    private readonly _messageService: MessageService
+    private readonly _messageService: MessageService,
+    private readonly _storageService: StorageService,
   ) {
     _messageService.tabMessage$.pipe(
       takeUntil(this._unsubscribeSubject$)
-    ).subscribe(this.onTabMessage)
+    ).subscribe(this.onTabMessage);
+
+    this.setConnectionUpdate({
+      status: this.connectionStatus,
+      peerId: this._connection?.peerId,
+    })
   }
 
   dispose(): void {
@@ -45,12 +52,6 @@ export class PeerService {
     case PopupMessageType.CloseConnection:
       this.closeConnection();
       return 
-    case PopupMessageType.RequestConnectionUpdated:
-      this.sendConnectionUpdatedMessage({
-        status: this.connectionStatus,
-        peerId: this._connection?.peerId,
-      })
-      return;
     default:
       // do not need to handle other messages here
       return;
@@ -58,7 +59,6 @@ export class PeerService {
   }
 
   private async startConnection(): Promise<void> {
-    console.log('START CONNECTION');
     return new Promise((resolve, reject) => {
       if (this._connection) {
         return resolve();
@@ -67,8 +67,7 @@ export class PeerService {
       this._connection = new PeerExtentionConnection(this._tabService.getTabInfo());
 
       this._connection.open$.subscribe((peerId) => {
-        console.log('START open$.subscribe');
-        this.sendConnectionUpdatedMessage({
+        this.setConnectionUpdate({
           status: ConnectionStatus.Open,
           peerId,
         });
@@ -76,16 +75,15 @@ export class PeerService {
       });
 
       this._connection.error$.subscribe((error) => {
-        this.sendConnectionUpdatedMessage({
+        this.setConnectionUpdate({
           status: ConnectionStatus.Error,
-          error,
+          error: error.type,
         });
         reject(error)
       });
 
       this._connection.connected$.subscribe((connection: DataConnection) => {
-        console.log('START connected$.subscribe');
-        this.sendConnectionUpdatedMessage({
+        this.setConnectionUpdate({
           status: ConnectionStatus.Connected,
           peerId: this._connection?.peerId,
         });
@@ -95,7 +93,7 @@ export class PeerService {
 
       this._connection.close$.subscribe(() => {
         this._dataConnection = undefined;
-        this.sendConnectionUpdatedMessage({
+        this.setConnectionUpdate({
           status: ConnectionStatus.Closed
         });
       });
@@ -119,10 +117,7 @@ export class PeerService {
     })
   }
 
-  private sendConnectionUpdatedMessage(message: Omit<ConnectionUpdatedPopupMessage, 'popupMessagetype'>): void {
-    this._messageService.sendPopupMessage({
-      popupMessagetype: PopupMessageType.ConnectionUpdated,
-      ...message
-    });
+  private async setConnectionUpdate(update:ConnectionUpdate): Promise<void> {
+    this._storageService.setConnectionStatusUpdate(this._tabId, update)
   }
 }

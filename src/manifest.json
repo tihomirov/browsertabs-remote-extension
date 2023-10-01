@@ -9,7 +9,8 @@
 		"128": "icon.png"
 	},
 	"permissions": [
-		"tabs"
+		"tabs",
+		"storage"
 	],
 	"background": {
 		"service_worker": "background.ts",

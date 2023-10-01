@@ -1,12 +1,14 @@
 import browser from 'webextension-polyfill';
 
 import {MessageService, TabService, PeerService} from './services';
+import {StorageService} from '../common/services';
 
 start();
 
 function start() {
   const messageService = new MessageService(browser);
   const tabService = new TabService(messageService);
+  const storageService = new StorageService(browser);
 
   let peerService: PeerService | undefined = undefined;
 
@@ -15,6 +17,6 @@ function start() {
       peerService.dispose();
     }
 
-    peerService = new PeerService(tabId, tabService, messageService)
+    peerService = new PeerService(tabId, tabService, messageService, storageService)
   })
 }
