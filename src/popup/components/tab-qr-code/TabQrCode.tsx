@@ -4,6 +4,7 @@ import {toDataURL} from 'qrcode';
 import {Typography} from '@rmwc/typography';
 import {Tooltip} from '@rmwc/tooltip';
 import {IconButton} from '@rmwc/icon-button';
+import {Icon} from '@rmwc/icon';
 
 import s from './styles.module.scss';
 import {Loader} from '../loader';
@@ -47,6 +48,9 @@ export const TabQrCode: FC<TabStatusProps> = ({peerId}) => {
       </div>
       <div className={s.peerId}>
         {peerId && <>
+          <Tooltip content={t('common:connection-peer-id-tutorial')}>
+            <Icon icon="info" />
+          </Tooltip>
           <Typography use="body1">{peerId}</Typography>
           <Tooltip content={tooltipContent}>
             <IconButton onClick={copyPeerId} onMouseLeave={resetTooltipContent} icon="content_copy" />

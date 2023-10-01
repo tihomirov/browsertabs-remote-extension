@@ -12,6 +12,7 @@
   "connection-status-open": "Відкритий",
   "connection-status-connected": "Підключено",
   "connection-status-error": "Помиилка",
+  "connection-peer-id-tutorial": "Ви можете скопіювати цей ідентифікатор та вставити його вручну в мобільному додатку",
   "copy-to-clipboard": "Копіюватии",
   "copy-to-clipboard-success": "Скопійовано успішно"
 }
