@@ -44,12 +44,6 @@ export const TabDetails: FC = observer(() => {
           <TabQrCode peerId={tab.peerId} />
         </GridCell>
       </GridRow>
-      {/* <ConnectTab 
-        tabId={tab.tab.id}
-        status={tab.status}
-        peerId={tab.peerId}
-        error={tab.error}
-      /> */}
     </Grid>
   )
 });
