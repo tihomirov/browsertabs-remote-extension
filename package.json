@@ -24,6 +24,7 @@
 		"@rmwc/circular-progress": "^8.0.8",
 		"@rmwc/grid": "^8.0.8",
 		"@rmwc/icon": "^8.0.8",
+		"@rmwc/icon-button": "^8.0.8",
 		"@rmwc/list": "^8.0.8",
 		"@rmwc/tooltip": "^8.0.8",
 		"@rmwc/top-app-bar": "^8.0.8",
@@ -44,8 +45,8 @@
 		"webextension-polyfill": "^0.10.0"
 	},
 	"devDependencies": {
-		"@parcel/config-webextension": "^2.6.2",
-		"@parcel/transformer-sass": "^2.6.2",
+		"@parcel/config-webextension": "^2.9.3",
+		"@parcel/transformer-sass": "^2.9.3",
 		"@types/chrome": "^0.0.237",
 		"@types/qrcode": "^1.5.1",
 		"@types/react": "^18.2.6",
@@ -60,7 +61,8 @@
 		"eslint-import-resolver-typescript": "^3.5.5",
 		"eslint-plugin-react": "^7.33.1",
 		"npm-run-all": "^4.1.5",
-		"parcel": "^2.6.2",
+		"parcel": "^2.9.3",
+		"parcel-namer-hashless": "^1.0.5",
 		"postcss": "^8.4.30",
 		"postcss-modules": "^4.3.1",
 		"process": "^0.11.10",
@@ -80,5 +82,14 @@
 	"@parcel/bundler-default-bug": "https://github.com/parcel-bundler/parcel/issues/8071",
 	"@parcel/bundler-default": {
 		"minBundles": 10000000
+	},
+	"parcel-namer-hashless": {
+		"include": [
+			".js$",
+			".css$",
+			".html$",
+			".png$"
+		],
+		"mode": "all"
 	}
 }

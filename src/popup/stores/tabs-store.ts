@@ -28,12 +28,12 @@ export class TabsStore {
         const index = this._tabs.findIndex(({tab}) => tab.id === message.tabId);
 
         if (isSomething(index)) {
-          this._tabs[index] = {
+          runInAction(() => this._tabs[index] = {
             tab: this._tabs[index].tab,
             status: message.status,
             peerId: message.peerId,
             error: message.error,
-          }
+          });
         }
       }
     })

@@ -3,8 +3,9 @@ import {useParams} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {Grid, GridRow, GridCell} from '@rmwc/grid';
 
-import {ConnectTab} from '../components/connect-tab';
+import {ConnectionStatus} from '../../common/types';
 import {TabStatus} from '../components/tab-status';
+import {TabQrCode} from '../components/tab-qr-code';
 import {useStores} from '../hooks';
 import {Loader} from '../components/loader';
 
@@ -21,6 +22,12 @@ export const TabDetails: FC = observer(() => {
     return () => tabsStore.clearCurrentTab();
   }, [tabId])
 
+  useEffect(() => {
+    if (tab && tab.status === ConnectionStatus.Closed) {
+      tabsStore.startConnection(tab.tab.id);
+    }
+  }, [tab])
+
   if (!tab) {
     return <Loader size="xlarge" />
   }
@@ -32,12 +39,17 @@ export const TabDetails: FC = observer(() => {
           <TabStatus status={tab.status} />
         </GridCell>
       </GridRow>
-      <ConnectTab 
+      <GridRow>
+        <GridCell span={12}>
+          <TabQrCode peerId={tab.peerId} />
+        </GridCell>
+      </GridRow>
+      {/* <ConnectTab 
         tabId={tab.tab.id}
         status={tab.status}
         peerId={tab.peerId}
         error={tab.error}
-      />
+      /> */}
     </Grid>
   )
 });

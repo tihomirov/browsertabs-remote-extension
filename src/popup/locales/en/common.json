@@ -11,5 +11,7 @@
   "connection-status-closed": "Closed",
   "connection-status-open": "Open",
   "connection-status-connected": "Connected",
-  "connection-status-error": "Error"
+  "connection-status-error": "Error",
+  "copy-to-clipboard": "Copy to clipboard",
+  "copy-to-clipboard-success": "Copied Successfully"
 }

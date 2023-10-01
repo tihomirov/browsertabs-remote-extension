@@ -11,5 +11,7 @@
   "connection-status-closed": "Не підключено",
   "connection-status-open": "Відкритий",
   "connection-status-connected": "Підключено",
-  "connection-status-error": "Помиилка"
+  "connection-status-error": "Помиилка",
+  "copy-to-clipboard": "Копіюватии",
+  "copy-to-clipboard-success": "Скопійовано успішно"
 }
