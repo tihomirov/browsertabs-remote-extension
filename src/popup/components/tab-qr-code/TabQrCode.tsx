@@ -21,7 +21,7 @@ export const TabQrCode: FC<TabStatusProps> = ({peerId}) => {
 
   useEffect(() => {
     if (peerId) {
-      toDataURL(peerId)
+      toDataURL(peerId, {margin: 1})
         .then(qr => setQrDataUrl(qr))
         .catch(() => setErrorMessage(t('common:connect-tab-qr-error')));
     }

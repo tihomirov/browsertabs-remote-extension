@@ -64,6 +64,14 @@ export class TabsStore {
     });
   }
 
+  async restartConnection(
+    tabId: number
+  ): Promise<void> {
+    await tabsService.sendMessage(tabId, {
+      popupMessagetype: PopupMessageType.RestartConnection,
+    });
+  }
+
   async closeConnection(
     tabId: number
   ): Promise<void> {

@@ -2,6 +2,7 @@ import {typeguard, isEnum} from '../utils'
 
 export enum PopupMessageType {
   StartConnection,
+  RestartConnection,
   CloseConnection,
 }
 
@@ -16,11 +17,15 @@ export type StartConnectionPopupMessage = Readonly<{
   popupMessagetype: PopupMessageType.StartConnection;
 }>;
 
+export type RestartConnectionPopupMessage = Readonly<{
+  popupMessagetype: PopupMessageType.RestartConnection;
+}>;
+
 export type CloseConnectionPopupMessage = Readonly<{
   popupMessagetype: PopupMessageType.CloseConnection;
 }>;
 
-export type PopupMessage = StartConnectionPopupMessage | CloseConnectionPopupMessage;
+export type PopupMessage = StartConnectionPopupMessage | RestartConnectionPopupMessage | CloseConnectionPopupMessage;
 
 export const popupMessageTypeguard = typeguard<PopupMessage>(
   ['popupMessagetype', isEnum(PopupMessageType)],

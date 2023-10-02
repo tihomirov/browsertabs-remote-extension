@@ -47,74 +47,75 @@ export class PeerService {
   private readonly onTabMessage = (message: PopupMessage): void => {
     switch (message.popupMessagetype) {
     case PopupMessageType.StartConnection:
-      this.startConnection();
-      return;
+      return this.startConnection();
+    case PopupMessageType.RestartConnection:
+      return this.restartConnection();
     case PopupMessageType.CloseConnection:
-      this.closeConnection();
-      return 
+      return this.closeConnection();
     default:
       // do not need to handle other messages here
       return;
     }
   }
 
-  private async startConnection(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      if (this._connection) {
-        return resolve();
-      }
+  private startConnection(): void {
+    if (this._connection) {
+      console.error('Connection is created and started');
+      return;
+    }
 
-      this._connection = new PeerExtentionConnection(this._tabService.getTabInfo());
+    this._connection = new PeerExtentionConnection(this._tabService.getTabInfo());
 
-      this._connection.open$.subscribe((peerId) => {
-        this.setConnectionUpdate({
-          status: ConnectionStatus.Open,
-          peerId,
-        });
-        resolve()
+    this._connection.open$.subscribe((peerId) => {
+      this.setConnectionUpdate({
+        status: ConnectionStatus.Open,
+        peerId,
       });
+    });
 
-      this._connection.error$.subscribe((error) => {
-        this.setConnectionUpdate({
-          status: ConnectionStatus.Error,
-          error: error.type,
-        });
-        reject(error)
+    this._connection.error$.subscribe((error) => {
+      this.setConnectionUpdate({
+        status: ConnectionStatus.Error,
+        error: error.type,
       });
+    });
 
-      this._connection.connected$.subscribe((connection: DataConnection) => {
-        this.setConnectionUpdate({
-          status: ConnectionStatus.Connected,
-          peerId: this._connection?.peerId,
-        });
-    
-        this._dataConnection = connection;
+    this._connection.connected$.subscribe((connection: DataConnection) => {
+      this.setConnectionUpdate({
+        status: ConnectionStatus.Connected,
+        peerId: this._connection?.peerId,
       });
+  
+      this._dataConnection = connection;
+    });
 
-      this._connection.close$.subscribe(() => {
-        this._dataConnection = undefined;
-        this.setConnectionUpdate({
-          status: ConnectionStatus.Closed
-        });
+    this._connection.close$.subscribe(() => {
+      this._dataConnection = undefined;
+      this.setConnectionUpdate({
+        status: ConnectionStatus.Closed
       });
+    });
 
-      this._connection.action$.subscribe((action) => {
-        const actionCommand = createAction(action, this._messageService);
+    this._connection.action$.subscribe((action) => {
+      const actionCommand = createAction(action, this._messageService);
 
-        actionCommand.run();
-      });
-    })
+      actionCommand.run();
+    });
   }
 
-  private async closeConnection(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      if (!this._connection) {
-        return reject(new Error('There is no Connection to close'));
-      }
+  private restartConnection(): void {
+    this.closeConnection();
+    this.startConnection();
+  }
 
-      this._connection?.destroy();
-      resolve();
-    })
+  private closeConnection(): void {
+    if (!this._connection) {
+      console.error('There is no Connection to close');
+      return;
+    }
+
+    this._connection?.destroy();
+    // this._connection === undefined;
   }
 
   private async setConnectionUpdate(update:ConnectionUpdate): Promise<void> {

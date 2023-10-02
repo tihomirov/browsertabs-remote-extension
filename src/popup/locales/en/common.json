@@ -1,9 +1,6 @@
 {
   "header-title": "Tabs Status",
   "no-tabs-to-connect": "There are no tabs to connect",
-  "tab-button-connect": "Connect",
-  "tab-button-disconnect": "Disconnect",
-  "tab-button-reconnect": "Reconnect",
   "connect-tab-qr-tutorial": "Scan this QR code from your mobile App",
   "connect-tab-qr-error": "Can not generate QR code. Please try again manually",
   "connect-tab-peer-id-error": "Can not fetch data to create connection",
@@ -14,5 +11,8 @@
   "connection-status-error": "Error",
   "connection-peer-id-tutorial": "You can copy this peer id and put it manually in mobile App",
   "copy-to-clipboard": "Copy to clipboard",
-  "copy-to-clipboard-success": "Copied Successfully"
+  "copy-to-clipboard-success": "Copied Successfully",
+  "connection-button-open": "Connect",
+  "connection-button-close": "Disconnect",
+  "connection-button-error": "Reconnect"
 }

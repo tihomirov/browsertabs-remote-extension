@@ -21,6 +21,7 @@
 		"extends": "stylelint-config-standard-scss"
 	},
 	"dependencies": {
+		"@rmwc/button": "^8.0.8",
 		"@rmwc/circular-progress": "^8.0.8",
 		"@rmwc/grid": "^8.0.8",
 		"@rmwc/icon": "^8.0.8",

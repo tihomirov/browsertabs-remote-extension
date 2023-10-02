@@ -1,11 +1,12 @@
 import React, {FC, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
-import {Grid, GridRow, GridCell} from '@rmwc/grid';
+import {Grid, GridCell} from '@rmwc/grid';
 
 import {ConnectionStatus} from '../../common/types';
 import {TabStatus} from '../components/tab-status';
 import {TabQrCode} from '../components/tab-qr-code';
+import {TabActions} from '../components/tab-actions';
 import {useStores} from '../hooks';
 import {Loader} from '../components/loader';
 
@@ -34,16 +35,15 @@ export const TabDetails: FC = observer(() => {
 
   return (
     <Grid>
-      <GridRow>
-        <GridCell span={12}>
-          <TabStatus status={tab.status} />
-        </GridCell>
-      </GridRow>
-      <GridRow>
-        <GridCell span={12}>
-          <TabQrCode peerId={tab.peerId} />
-        </GridCell>
-      </GridRow>
+      <GridCell span={2}>
+        <TabStatus status={tab.status} />
+      </GridCell>
+      <GridCell span={2} >
+        <TabActions tabId={tab.tab.id} status={tab.status} />
+      </GridCell>
+      <GridCell span={4}>
+        <TabQrCode peerId={tab.peerId} />
+      </GridCell>
     </Grid>
   )
 });

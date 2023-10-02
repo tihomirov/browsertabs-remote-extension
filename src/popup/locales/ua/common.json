@@ -1,18 +1,18 @@
 {
   "header-title": "Статус Вкладок",
   "no-tabs-to-connect": "Нема доступних вкладок для підключення",
-  "tab-button-connect": "Підключити",
-  "tab-button-disconnect": "Відключити",
-  "tab-button-reconnect": "Перепідключити",
   "connect-tab-qr-tutorial": "Проскануйте цей QR код з вашого мобільного додатку",
   "connect-tab-qr-error": "Не вдається згенеруватии QR код. Спробуйте будь ласка ще раз",
   "connect-tab-peer-id-error": "Не вдається отриимати інформацію щоб створити підключення",
-  "connection-status": "Статус Підключення",
+  "connection-status": "Статус підключення",
   "connection-status-closed": "Не підключено",
   "connection-status-open": "Відкритий",
   "connection-status-connected": "Підключено",
   "connection-status-error": "Помиилка",
   "connection-peer-id-tutorial": "Ви можете скопіювати цей ідентифікатор та вставити його вручну в мобільному додатку",
   "copy-to-clipboard": "Копіюватии",
-  "copy-to-clipboard-success": "Скопійовано успішно"
+  "copy-to-clipboard-success": "Скопійовано успішно",
+  "connection-button-open": "Підключити",
+  "connection-button-close": "Відключити",
+  "connection-button-error": "Перепідключити"
 }
