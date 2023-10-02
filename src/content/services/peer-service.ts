@@ -89,8 +89,9 @@ export class PeerService {
       this._dataConnection = connection;
     });
 
-    this._connection.close$.subscribe(() => {
+    this._connection.disconnected$.subscribe(() => {
       this._dataConnection = undefined;
+      this._connection = undefined;
       this.setConnectionUpdate({
         status: ConnectionStatus.Closed
       });
@@ -115,7 +116,6 @@ export class PeerService {
     }
 
     this._connection?.destroy();
-    // this._connection === undefined;
   }
 
   private async setConnectionUpdate(update:ConnectionUpdate): Promise<void> {

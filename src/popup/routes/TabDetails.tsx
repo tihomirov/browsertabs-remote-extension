@@ -27,7 +27,7 @@ export const TabDetails: FC = observer(() => {
     if (tab && tab.status === ConnectionStatus.Closed) {
       tabsStore.startConnection(tab.tab.id);
     }
-  }, [tab])
+  }, [tab?.tab.id])
 
   if (!tab) {
     return <Loader size="xlarge" />

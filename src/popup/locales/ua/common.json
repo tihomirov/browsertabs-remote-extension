@@ -4,7 +4,7 @@
   "connect-tab-qr-tutorial": "Проскануйте цей QR код з вашого мобільного додатку",
   "connect-tab-qr-error": "Не вдається згенеруватии QR код. Спробуйте будь ласка ще раз",
   "connect-tab-peer-id-error": "Не вдається отриимати інформацію щоб створити підключення",
-  "connection-status": "Статус підключення",
+  "connection-status": "Статус",
   "connection-status-closed": "Не підключено",
   "connection-status-open": "Відкритий",
   "connection-status-connected": "Підключено",
