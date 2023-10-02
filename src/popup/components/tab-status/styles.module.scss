@@ -1,20 +1,22 @@
-.statusText {
-	text-decoration: underline;
-	text-transform: uppercase;
-
+.status {
 	&.closed {
-		color: gray;
+		color: #CCCCCC;
 	}
-
+	
 	&.connected {
-		color: greenyellow;
+		color: #279B23;
 	}
-
+	
 	&.open {
-		color: yellow;
+		color: #FEC106;
+	}
+	
+	&.error {
+		color: #E61B24;
 	}
 
-	&.error {
-		color: red;
+	&.text {
+		text-decoration: underline;
+		text-transform: uppercase;
 	}
 }

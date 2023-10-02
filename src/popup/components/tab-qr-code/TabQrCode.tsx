@@ -9,11 +9,11 @@ import {Icon} from '@rmwc/icon';
 import s from './styles.module.scss';
 import {Loader} from '../loader';
 
-type TabStatusProps = Readonly<{
+type TabQrCodeProps = Readonly<{
   peerId: string | undefined;
 }>;
 
-export const TabQrCode: FC<TabStatusProps> = ({peerId}) => {
+export const TabQrCode: FC<TabQrCodeProps> = ({peerId}) => {
   const {t} = useTranslation();
   const [qrDataUrl, setQrDataUrl] = useState<string | undefined>();
   const [tooltipContent, setTooltipContent] = useState<string>(t('common:copy-to-clipboard'));
