@@ -4,6 +4,7 @@ import {createMemoryRouter, RouterProvider} from 'react-router-dom';
 import {Root, Home, TabDetails} from './routes';
 import {ErrorPage} from './ErrorPage';
 import {RootStore, StoreProvider} from './stores';
+import {ThemeProvider} from './components/theme-provider';
 
 import './styles.module.scss';
 
@@ -28,7 +29,9 @@ const router = createMemoryRouter([
 ]);
 
 export const App: FC = () => (
-  <StoreProvider store={rootStore}>
-    <RouterProvider router={router} />
+  <StoreProvider store={rootStore}>    
+    <ThemeProvider>
+      <RouterProvider router={router} />
+    </ThemeProvider>
   </StoreProvider>
 );
