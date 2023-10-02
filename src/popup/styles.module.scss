@@ -1,17 +1,11 @@
 @import 'reset-css/reset.css';
-@import '@rmwc/icon/icon.css';
 @import '@material/layout-grid/dist/mdc.layout-grid.css';
 @import '@material/top-app-bar/dist/mdc.top-app-bar.css';
 @import '@material/icon-button/dist/mdc.icon-button.css';
+@import '@rmwc/icon/icon.css';
 @import '@material/ripple/dist/mdc.ripple.css';
 @import '@material/list/dist/mdc.list.css';
 @import '@rmwc/circular-progress/circular-progress.css';
 @import '@rmwc/tooltip/tooltip.css';
 @import '@material/typography/dist/mdc.typography.css';
 @import '@material/button/dist/mdc.button.css';
-
-:global(#root) {
-	width: 500px;
-	height: 375px;
-	overflow: hidden;
-}

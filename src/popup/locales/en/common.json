@@ -14,5 +14,8 @@
   "copy-to-clipboard-success": "Copied Successfully",
   "connection-button-open": "Connect",
   "connection-button-close": "Disconnect",
-  "connection-button-error": "Reconnect"
+  "connection-button-error": "Reconnect",
+  "connection-details-message-connected": "Successfully connected!",
+  "connection-details-message-closed": "No connection created. Press CONNECT button!",
+  "connection-details-message-error": "Connection error: {{error}}"
 }

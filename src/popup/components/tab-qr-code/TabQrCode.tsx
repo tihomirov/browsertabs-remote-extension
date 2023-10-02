@@ -6,8 +6,8 @@ import {Tooltip} from '@rmwc/tooltip';
 import {IconButton} from '@rmwc/icon-button';
 import {Icon} from '@rmwc/icon';
 
-import s from './styles.module.scss';
 import {Loader} from '../loader';
+import s from './styles.module.scss';
 
 type TabQrCodeProps = Readonly<{
   peerId: string | undefined;
