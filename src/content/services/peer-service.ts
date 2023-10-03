@@ -27,7 +27,7 @@ export class PeerService {
     this.setConnectionUpdate({
       status: this.connectionStatus,
       peerId: this._connection?.peerId,
-    })
+    });
   }
 
   dispose(): void {
@@ -56,7 +56,7 @@ export class PeerService {
       // do not need to handle other messages here
       return;
     }
-  }
+  };
 
   private startConnection(): void {
     if (this._connection) {
@@ -119,6 +119,6 @@ export class PeerService {
   }
 
   private async setConnectionUpdate(update:ConnectionUpdate): Promise<void> {
-    this._storageService.setConnectionStatusUpdate(this._tabId, update)
+    this._storageService.setConnectionStatusUpdate(this._tabId, update);
   }
 }

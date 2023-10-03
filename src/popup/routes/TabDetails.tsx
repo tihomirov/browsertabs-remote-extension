@@ -22,16 +22,16 @@ export const TabDetails: FC = observer(() => {
     }
 
     return () => tabsStore.clearCurrentTab();
-  }, [tabId])
+  }, [tabId]);
 
   useEffect(() => {
     if (tab && tab.status === ConnectionStatus.Closed) {
       tabsStore.startConnection(tab.tab.id);
     }
-  }, [tab?.tab.id])
+  }, [tab?.tab.id]);
 
   if (!tab) {
-    return <Loader size="xlarge" />
+    return <Loader size="xlarge" />;
   }
 
   return (
@@ -49,5 +49,5 @@ export const TabDetails: FC = observer(() => {
         }
       </GridCell>
     </Grid>
-  )
+  );
 });

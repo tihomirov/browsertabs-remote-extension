@@ -37,7 +37,7 @@ export class MessageService {
     }
 
     if (backgroundMessageTypeguard(message)) {
-      return this._backgroundMessage$.next(message)
+      return this._backgroundMessage$.next(message);
     }
-  }
+  };
 }

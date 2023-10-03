@@ -43,4 +43,4 @@ class TabsService {
   }
 }
 
-export const tabsService = new TabsService()
+export const tabsService = new TabsService();

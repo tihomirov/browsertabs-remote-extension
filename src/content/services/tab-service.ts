@@ -21,9 +21,9 @@ export class TabService {
       takeUntil(this._unsubscribeSubject$),
       filter(message => message.backgroundMessageType === BackgroundMessageType.ResponseTabId),
       map((message: ResponseTabIdBackgroundMessage) => message.tabId)
-    )
+    );
 
-    this._messageService.sendBackgroundMessage({backgroundMessageType: BackgroundMessageType.RequestTabId})
+    this._messageService.sendBackgroundMessage({backgroundMessageType: BackgroundMessageType.RequestTabId});
 
     return tabId$;
   }
@@ -32,6 +32,6 @@ export class TabService {
     return {
       title: window.document.title,
       favIconUrl: document.querySelector<HTMLLinkElement>('link[rel*=\'icon\']')?.href,
-    }
+    };
   }
 }

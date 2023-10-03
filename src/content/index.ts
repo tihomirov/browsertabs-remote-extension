@@ -17,6 +17,6 @@ function start() {
       peerService.dispose();
     }
 
-    peerService = new PeerService(tabId, tabService, messageService, storageService)
-  })
+    peerService = new PeerService(tabId, tabService, messageService, storageService);
+  });
 }

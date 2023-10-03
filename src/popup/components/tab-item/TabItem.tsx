@@ -16,8 +16,8 @@ export const TabItem: FC<TabItemProps> = observer(({tab}) => {
   const navigate = useNavigate();
 
   const onClick = useCallback(() => {
-    navigate(`/tab/${tab.tab.id}`)
-  }, [tab])
+    navigate(`/tab/${tab.tab.id}`);
+  }, [tab]);
 
   return (
     <ListItem onClick={onClick}>

@@ -16,15 +16,15 @@ export const TabActions: FC<TabActionsProps> = ({status, tabId}) => {
   const {tabsStore} = useStores();
 
   const closeConnection = useCallback(() => {
-    tabsStore.closeConnection(tabId)
+    tabsStore.closeConnection(tabId);
   }, [tabsStore, tabId]);
 
   const restartConnection = useCallback(() => {
-    tabsStore.restartConnection(tabId)
+    tabsStore.restartConnection(tabId);
   }, [tabsStore, tabId]);
 
   const startConnection = useCallback(() => {
-    tabsStore.startConnection(tabId)
+    tabsStore.startConnection(tabId);
   }, [tabsStore, tabId]);
 
   if (status === ConnectionStatus.Open || status === ConnectionStatus.Connected) {

@@ -1,5 +1,5 @@
 import {Browser, Storage} from 'webextension-polyfill';
-import {Observable, Subject} from 'rxjs'
+import {Observable, Subject} from 'rxjs';
 
 import {CONNECTION_STATUS_STORAGE_KEY, ConnectionUpdate, ConnectionsStatus, connectionUpdateTypeguard} from '../../common/types';
 
@@ -42,7 +42,7 @@ export class StorageService {
 
   private readonly onStorageListener = (changes: Record<string, Storage.StorageChange>, namespace: string): void => {
     if (namespace !== 'local') {
-      return
+      return;
     }
 
     const {newValue} = changes[CONNECTION_STATUS_STORAGE_KEY];
@@ -59,5 +59,5 @@ export class StorageService {
         });
       }
     }
-  }
+  };
 }

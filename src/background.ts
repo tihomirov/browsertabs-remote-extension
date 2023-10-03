@@ -14,7 +14,7 @@ runtime.onMessage.addListener(async (message, sender) => {
         sendMessage(tabId, {
           tabId,
           backgroundMessageType: BackgroundMessageType.ResponseTabId,
-        })
+        });
       }
       return;
     case BackgroundMessageType.DecreaseZoom:

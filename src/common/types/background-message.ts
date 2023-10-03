@@ -1,4 +1,4 @@
-import {typeguard, isEnum} from '../utils'
+import {typeguard, isEnum} from '../utils';
 
 export enum BackgroundMessageType {
   RequestTabId,

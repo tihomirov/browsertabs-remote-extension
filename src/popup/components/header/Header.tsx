@@ -8,7 +8,7 @@ import {useStores} from '../../hooks';
 
 type HeaderProps = Readonly<{
   scrollTarget: Element;
-}>
+}>;
 
 export const Header: FC<HeaderProps> = observer(({scrollTarget}) => {
   const {t} = useTranslation();
@@ -19,10 +19,10 @@ export const Header: FC<HeaderProps> = observer(({scrollTarget}) => {
 
   const title = useMemo(() => {
     if (isHomePage) {
-      return t('common:header-title')
+      return t('common:header-title');
     }
     return tabsStore.currentTab?.tab.title || t('common:header-title');
-  }, [tabsStore.currentTab, t])
+  }, [tabsStore.currentTab, t]);
 
   const navigateToHome = useCallback(() => {
     navigate('/');

@@ -24,7 +24,7 @@ export class TabsStore {
     // TODO: unsubscribe
     storageService.connectionUpdate$.subscribe(({tabId, update}) => {
       this.updateTabStatus(tabId, update);
-    })
+    });
     
     void this.fetchTabs();
   }
@@ -97,12 +97,12 @@ export class TabsStore {
         tabsWithId.map(tab => {
           const tabStatus = connectionsStatus?.[tab.id] ?? {
             status: ConnectionStatus.Closed
-          }
+          };
 
           return {
             tab,
             ...tabStatus,
-          }
+          };
         }));
       this._loading = false;
     });

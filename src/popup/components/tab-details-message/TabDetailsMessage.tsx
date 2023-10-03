@@ -16,16 +16,16 @@ const statusIcon: Record<ConnectionStatus, string | undefined> = {
   [ConnectionStatus.Connected]: 'link',
   [ConnectionStatus.Closed]: 'portable_wifi_off',
   [ConnectionStatus.Open]: undefined,
-}
+};
 
 const statusMessages: Record<ConnectionStatus, string | undefined> = {
   [ConnectionStatus.Error]: 'common:connection-details-message-error',
   [ConnectionStatus.Connected]: 'common:connection-details-message-connected',
   [ConnectionStatus.Closed]: 'common:connection-details-message-closed',
   [ConnectionStatus.Open]:  undefined,
-}
+};
 
-const defaultErrorMessage = 'Unknown'
+const defaultErrorMessage = 'Unknown';
 
 export const TabDetailsMessage: FC<TabStatusProps> = ({status, error}) => {
   const {t} = useTranslation();

@@ -32,7 +32,7 @@ export const TabStatus: FC<TabStatusProps> = ({status, listIcon = false}) => {
   });
 
   if (listIcon) {
-    return <ListItemGraphic className={statusClassName} icon='workspaces' />
+    return <ListItemGraphic className={statusClassName} icon='workspaces' />;
   }
 
   return (
