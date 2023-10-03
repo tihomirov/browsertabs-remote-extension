@@ -20,10 +20,13 @@
     ],
     "rules": {
         "quotes": ["error", "single"],
-        "indent": ["error", 2],
+        "indent": ["error", 2, {
+            "offsetTernaryExpressions": true
+        }],
         "no-mixed-spaces-and-tabs": 2,
         "no-trailing-spaces": "error",
         "no-multiple-empty-lines": ["error", { "max": 1 }],
+        "max-len": ["error", { "code": 100 }],
         "@typescript-eslint/semi": ["error", "always"],
         "object-curly-spacing": ["error", "never", { "objectsInObjects": false }],
         "simple-import-sort/imports": "error",

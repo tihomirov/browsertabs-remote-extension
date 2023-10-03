@@ -38,7 +38,9 @@ export const TabStatus: FC<TabStatusProps> = ({status, listIcon = false}) => {
   return (
     <>
       <Typography use="subtitle1">{t('common:connection-status')}: </Typography>
-      <Typography className={statusClassName} use="headline6">{t(tabStatusLocalKey[status])}</Typography>
+      <Typography className={statusClassName} use="headline6">
+        {t(tabStatusLocalKey[status])}
+      </Typography>
     </>
   );
 };

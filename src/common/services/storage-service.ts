@@ -1,7 +1,11 @@
 import {Observable, Subject} from 'rxjs';
 import {Browser, Storage} from 'webextension-polyfill';
 
-import {CONNECTION_STATUS_STORAGE_KEY, ConnectionsStatus, ConnectionUpdate, connectionUpdateTypeguard} from '../../common/types';
+import {
+  CONNECTION_STATUS_STORAGE_KEY,
+  ConnectionsStatus, ConnectionUpdate,
+  connectionUpdateTypeguard
+} from '../../common/types';
 
 type ConnectionUpdateData = Readonly<{
   tabId: number;
@@ -40,7 +44,10 @@ export class StorageService {
     return data[CONNECTION_STATUS_STORAGE_KEY];
   }
 
-  private readonly onStorageListener = (changes: Record<string, Storage.StorageChange>, namespace: string): void => {
+  private readonly onStorageListener = (
+    changes: Record<string, Storage.StorageChange>,
+    namespace: string
+  ): void => {
     if (namespace !== 'local') {
       return;
     }

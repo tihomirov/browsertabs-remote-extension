@@ -29,19 +29,31 @@ export const TabActions: FC<TabActionsProps> = ({status, tabId}) => {
 
   if (status === ConnectionStatus.Open || status === ConnectionStatus.Connected) {
     return (
-      <Button className={s.button} onClick={closeConnection} label={t('common:connection-button-close')} />
+      <Button
+        className={s.button}
+        onClick={closeConnection}
+        label={t('common:connection-button-close')}
+      />
     );
   }
 
   if (status === ConnectionStatus.Error) {
     return (
-      <Button className={s.button} onClick={restartConnection} label={t('common:connection-button-error')} />
+      <Button
+        className={s.button}
+        onClick={restartConnection}
+        label={t('common:connection-button-error')}
+      />
     );
   }
 
   if (status === ConnectionStatus.Closed) {
     return (
-      <Button className={s.button} onClick={startConnection} label={t('common:connection-button-open')} />
+      <Button
+        className={s.button}
+        onClick={startConnection}
+        label={t('common:connection-button-open')}
+      />
     );
   }
 

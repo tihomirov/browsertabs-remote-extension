@@ -53,7 +53,11 @@ export const TabQrCode: FC<TabQrCodeProps> = ({peerId}) => {
           </Tooltip>
           <Typography use="body1">{peerId}</Typography>
           <Tooltip content={tooltipContent}>
-            <IconButton onClick={copyPeerId} onMouseLeave={resetTooltipContent} icon="content_copy" />
+            <IconButton
+              onClick={copyPeerId}
+              onMouseLeave={resetTooltipContent}
+              icon="content_copy"
+            />
           </Tooltip>
         </>}
       </div>

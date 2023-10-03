@@ -90,7 +90,8 @@ export class TabsStore {
       storageService.getConnectionsStatus(),
     ]);
 
-    const tabsWithId = tabs.filter(tab => tab.id) as Array<Tabs.Tab & Required<Pick<Tabs.Tab, 'id'>>>;
+    const tabsWithId = tabs
+      .filter(tab => tab.id) as Array<Tabs.Tab & Required<Pick<Tabs.Tab, 'id'>>>;
 
     runInAction(() => {
       this._tabs.replace(

@@ -25,7 +25,9 @@ export type CloseConnectionPopupMessage = Readonly<{
   popupMessagetype: PopupMessageType.CloseConnection;
 }>;
 
-export type PopupMessage = StartConnectionPopupMessage | RestartConnectionPopupMessage | CloseConnectionPopupMessage;
+export type PopupMessage = StartConnectionPopupMessage |
+  RestartConnectionPopupMessage |
+  CloseConnectionPopupMessage;
 
 export const popupMessageTypeguard = typeguard<PopupMessage>(
   ['popupMessagetype', isEnum(PopupMessageType)],

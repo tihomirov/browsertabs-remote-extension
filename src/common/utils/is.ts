@@ -1,6 +1,8 @@
 import {PlainObject, Typeguard} from '../types';
 
-export function isSomething<T>(x: T | undefined | null): x is NonNullable<T> { // eslint-disable-line @typescript-eslint/ban-types
+export function isSomething<T>(
+  x: T | undefined | null
+): x is NonNullable<T> { // eslint-disable-line @typescript-eslint/ban-types
   return x != null; // eslint-disable-line no-eq-null, eqeqeq
 }
 
@@ -27,7 +29,9 @@ export function isNonArrayObject(item: unknown): item is NonNullable<PlainObject
 export const isEnum = <T extends object>(EnumType: T) => {
   const isNumberEnumValue = (value: unknown) => isNumber(value) && value in EnumType;
   const values = Object.values(EnumType);
-  const validValues = new Set(values.filter(values.some(isNumberEnumValue) ? isNumberEnumValue : isString));
+  const validValues = new Set(
+    values.filter(values.some(isNumberEnumValue) ? isNumberEnumValue : isString)
+  );
   return (item: unknown): item is T[keyof T] => validValues.has(item);
 };
 
@@ -48,5 +52,7 @@ export function typeguard<T>(
 }
 
 export function arrayTypeguard<T>(elementTypeguard: Typeguard<T>): Typeguard<ReadonlyArray<T>> {
-  return (array: unknown): array is ReadonlyArray<T> => Array.isArray(array) && array.every(elementTypeguard);
+  return (
+    array: unknown
+  ): array is ReadonlyArray<T> => Array.isArray(array) && array.every(elementTypeguard);
 }

@@ -37,7 +37,9 @@ export const TabDetailsMessage: FC<TabStatusProps> = ({status, error}) => {
   return (
     <div className={s.container}>
       <Icon className={s.icon} icon={{icon: statusIcon[status], size: 'xlarge'}} />
-      <Typography use="body1">{t(statusMessages[status], {error: error ?? defaultErrorMessage})}</Typography>
+      <Typography use="body1">
+        {t(statusMessages[status], {error: error ?? defaultErrorMessage})}
+      </Typography>
     </div>
   );
 };

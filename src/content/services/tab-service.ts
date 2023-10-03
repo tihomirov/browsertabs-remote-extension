@@ -23,7 +23,9 @@ export class TabService {
       map((message: ResponseTabIdBackgroundMessage) => message.tabId)
     );
 
-    this._messageService.sendBackgroundMessage({backgroundMessageType: BackgroundMessageType.RequestTabId});
+    this._messageService.sendBackgroundMessage({
+      backgroundMessageType: BackgroundMessageType.RequestTabId
+    });
 
     return tabId$;
   }

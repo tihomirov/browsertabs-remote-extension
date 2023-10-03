@@ -1,4 +1,12 @@
-import {TopAppBar, TopAppBarFixedAdjust,TopAppBarNavigationIcon, TopAppBarRow, TopAppBarSection, TopAppBarTitle} from '@rmwc/top-app-bar';
+import {
+  TopAppBar,
+  TopAppBarActionItem,
+  TopAppBarFixedAdjust,
+  TopAppBarNavigationIcon,
+  TopAppBarRow,
+  TopAppBarSection,
+  TopAppBarTitle
+} from '@rmwc/top-app-bar';
 import {observer} from 'mobx-react-lite';
 import React, {FC, useCallback, useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
@@ -35,6 +43,11 @@ export const Header: FC<HeaderProps> = observer(({scrollTarget}) => {
           <TopAppBarSection>
             {!isHomePage && <TopAppBarNavigationIcon icon="first_page" onClick={navigateToHome}/>}
             <TopAppBarTitle>{title}</TopAppBarTitle>
+          </TopAppBarSection>
+          <TopAppBarSection alignEnd>
+            <TopAppBarActionItem icon="favorite" />
+            <TopAppBarActionItem icon="star" />
+            <TopAppBarActionItem icon="mood" />
           </TopAppBarSection>
         </TopAppBarRow>
       </TopAppBar>

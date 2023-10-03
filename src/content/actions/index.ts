@@ -11,7 +11,10 @@ import {ReloadActionCommand} from './reload-tab-action';
 import {SetZoomActionCommand} from './set-zoom-action';
 import {ToggleMuteActionCommand} from './toggle-mute-tab-action';
 
-export function createAction(action: Action, messageService: MessageService): ActionCommand<Action> {
+export function createAction(
+  action: Action,
+  messageService: MessageService
+): ActionCommand<Action> {
   const type = action.type;
 
   switch (type) {
