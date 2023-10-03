@@ -5,7 +5,7 @@ import {createMemoryRouter, RouterProvider} from 'react-router-dom';
 
 import {ThemeProvider} from './components/theme-provider';
 import {ErrorPage} from './ErrorPage';
-import {Home, Root, TabDetails} from './routes';
+import {Home, Root, Settings,TabDetails} from './routes';
 import {RootStore, StoreProvider} from './stores';
 
 const rootStore = new RootStore();
@@ -23,6 +23,10 @@ const router = createMemoryRouter([
       {
         path: 'tab/:tabId',
         element: <TabDetails />,
+      },
+      {
+        path: 'settings',
+        element: <Settings />,
       },
     ],
   },

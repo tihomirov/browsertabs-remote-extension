@@ -52,7 +52,8 @@ export class StorageService {
       return;
     }
 
-    const {newValue} = changes[CONNECTION_STATUS_STORAGE_KEY];
+    const connectionStatusChanges = changes[CONNECTION_STATUS_STORAGE_KEY];
+    const newValue = connectionStatusChanges?.newValue;
 
     if (!newValue) {
       return;

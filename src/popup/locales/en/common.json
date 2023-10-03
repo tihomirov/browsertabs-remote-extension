@@ -17,5 +17,6 @@
   "connection-button-error": "Reconnect",
   "connection-details-message-connected": "Successfully connected!",
   "connection-details-message-closed": "No connection created. Press CONNECT button!",
-  "connection-details-message-error": "Connection error: {{error}}"
+  "connection-details-message-error": "Connection error: {{error}}",
+  "color-theme": "Color theme"
 }

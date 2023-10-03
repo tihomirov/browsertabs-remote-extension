@@ -17,5 +17,6 @@
   "connection-button-error": "Перепідключити",
   "connection-details-message-connected": "Успішно підключено!",
   "connection-details-message-closed": "Не створенно підключення. Нажміть кнопку ПІДКЛЮЧТИ!",
-  "connection-details-message-error": "Помилка підключення: {{error}}"
+  "connection-details-message-error": "Помилка підключення: {{error}}",
+  "color-theme": "Кольорова тема"
 }

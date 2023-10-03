@@ -1,5 +1,6 @@
 import {
   TopAppBar,
+  TopAppBarActionItem,
   TopAppBarFixedAdjust,
   TopAppBarNavigationIcon,
   TopAppBarRow,
@@ -35,13 +36,20 @@ export const Header: FC<HeaderProps> = observer(({scrollTarget}) => {
     navigate('/');
   }, [navigate]);
 
+  const navigateToSettings = useCallback(() => {
+    navigate('/settings');
+  }, [navigate]);
+
   return (
     <>
       <TopAppBar fixed scrollTarget={scrollTarget}>
         <TopAppBarRow>
-          <TopAppBarSection>
+          <TopAppBarSection alignStart>
             {!isHomePage && <TopAppBarNavigationIcon icon="first_page" onClick={navigateToHome}/>}
             <TopAppBarTitle>{title}</TopAppBarTitle>
+          </TopAppBarSection>
+          <TopAppBarSection alignEnd>
+            <TopAppBarActionItem icon="settings" onClick={navigateToSettings} />
           </TopAppBarSection>
         </TopAppBarRow>
       </TopAppBar>

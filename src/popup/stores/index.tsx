@@ -3,6 +3,7 @@ import React, {createContext, FC, ReactElement, ReactNode} from 'react';
 import {RootStore} from './root-store';
 
 export * from './root-store';
+export * from './settings-store';
 
 export const StoreContext = createContext<RootStore>({} as RootStore);
 
