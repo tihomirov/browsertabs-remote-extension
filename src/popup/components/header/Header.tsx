@@ -1,6 +1,5 @@
 import {
   TopAppBar,
-  TopAppBarActionItem,
   TopAppBarFixedAdjust,
   TopAppBarNavigationIcon,
   TopAppBarRow,
@@ -43,11 +42,6 @@ export const Header: FC<HeaderProps> = observer(({scrollTarget}) => {
           <TopAppBarSection>
             {!isHomePage && <TopAppBarNavigationIcon icon="first_page" onClick={navigateToHome}/>}
             <TopAppBarTitle>{title}</TopAppBarTitle>
-          </TopAppBarSection>
-          <TopAppBarSection alignEnd>
-            <TopAppBarActionItem icon="favorite" />
-            <TopAppBarActionItem icon="star" />
-            <TopAppBarActionItem icon="mood" />
           </TopAppBarSection>
         </TopAppBarRow>
       </TopAppBar>
