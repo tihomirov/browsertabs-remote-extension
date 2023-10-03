@@ -29,7 +29,7 @@ const router = createMemoryRouter([
 ]);
 
 export const App: FC = () => (
-  <StoreProvider store={rootStore}>    
+  <StoreProvider store={rootStore}>
     <ThemeProvider>
       <RouterProvider router={router} />
     </ThemeProvider>

@@ -43,7 +43,7 @@ export const TabDetails: FC = observer(() => {
         <TabActions tabId={tab.tab.id} status={tab.status} />
       </GridCell>
       <GridCell span={4}>
-        {tab.status === ConnectionStatus.Open 
+        {tab.status === ConnectionStatus.Open
           ? <TabQrCode peerId={tab.peerId} />
           : <TabDetailsMessage status={tab.status} error={tab.error} />
         }

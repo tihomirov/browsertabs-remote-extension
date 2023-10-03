@@ -41,14 +41,13 @@ export type CloseTabBackgroundMessage = Readonly<{
 }>;
 
 export type BackgroundMessage = RequestTabIdBackgroundMessage |
-  ResponseTabIdBackgroundMessage | 
-  DecreaseZoomBackgroundMessage | 
-  IncreaseZoomBackgroundMessage | 
-  SetZoomBackgroundMessage | 
-  CloseTabBackgroundMessage | 
+  ResponseTabIdBackgroundMessage |
+  DecreaseZoomBackgroundMessage |
+  IncreaseZoomBackgroundMessage |
+  SetZoomBackgroundMessage |
+  CloseTabBackgroundMessage |
   ToggleMuteBackgroundMessage;
 
 export const backgroundMessageTypeguard = typeguard<BackgroundMessage>(
   ['backgroundMessageType', isEnum(BackgroundMessageType)],
 );
-  

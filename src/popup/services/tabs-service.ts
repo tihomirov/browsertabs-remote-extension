@@ -14,7 +14,7 @@ class TabsService {
       handler => runtime.onMessage.removeListener(handler),
       (request, sender: Runtime.MessageSender, sendResponse) => ({request, sender, sendResponse})
     ).pipe(
-      map(({request, sender}) => 
+      map(({request, sender}) =>
         popupMessageTypeguard(request)
           ? {...request, tabId: sender.tab?.id}
           : undefined
@@ -28,7 +28,7 @@ class TabsService {
   }
 
   async sendMessage(
-    tabId: number, 
+    tabId: number,
     message: PopupMessage
   ): Promise<void> {
     try {

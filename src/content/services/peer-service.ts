@@ -85,7 +85,7 @@ export class PeerService {
         status: ConnectionStatus.Connected,
         peerId: this._connection?.peerId,
       });
-  
+
       this._dataConnection = connection;
     });
 

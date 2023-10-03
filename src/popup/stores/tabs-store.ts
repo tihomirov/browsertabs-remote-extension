@@ -7,7 +7,7 @@ import {tabsService, storageService} from '../services';
 export type Tab = {
   tab: Tabs.Tab & Required<Pick<Tabs.Tab, 'id'>>;
   status: ConnectionStatus;
-  peerId?: string; 
+  peerId?: string;
   error?: string
 };
 
@@ -25,7 +25,7 @@ export class TabsStore {
     storageService.connectionUpdate$.subscribe(({tabId, update}) => {
       this.updateTabStatus(tabId, update);
     });
-    
+
     void this.fetchTabs();
   }
 

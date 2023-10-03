@@ -54,7 +54,7 @@ export class StorageService {
     for (const [tabId, update] of Object.entries(newValue)) {
       if (connectionUpdateTypeguard(update)) {
         this._connectionUpdate$.next({
-          tabId: Number(tabId), 
+          tabId: Number(tabId),
           update,
         });
       }
