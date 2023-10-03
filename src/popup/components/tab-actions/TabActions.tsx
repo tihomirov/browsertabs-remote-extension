@@ -1,6 +1,6 @@
+import {Button} from '@rmwc/button';
 import React, {FC, useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
-import {Button} from '@rmwc/button';
 
 import {ConnectionStatus} from '../../../common/types';
 import {useStores} from '../../hooks';

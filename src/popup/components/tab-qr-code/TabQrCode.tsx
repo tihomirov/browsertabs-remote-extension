@@ -1,10 +1,10 @@
+import {Icon} from '@rmwc/icon';
+import {IconButton} from '@rmwc/icon-button';
+import {Tooltip} from '@rmwc/tooltip';
+import {Typography} from '@rmwc/typography';
+import {toDataURL} from 'qrcode';
 import React, {FC, useCallback, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {toDataURL} from 'qrcode';
-import {Typography} from '@rmwc/typography';
-import {Tooltip} from '@rmwc/tooltip';
-import {IconButton} from '@rmwc/icon-button';
-import {Icon} from '@rmwc/icon';
 
 import {Loader} from '../loader';
 import s from './styles.module.scss';

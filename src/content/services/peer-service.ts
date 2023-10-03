@@ -1,11 +1,10 @@
-import {Subject, takeUntil} from 'rxjs';
-import {DataConnection} from 'peerjs';
 import {IExtentionConnection, PeerExtentionConnection} from 'browsertabs-remote-common/src/extention';
+import {DataConnection} from 'peerjs';
+import {Subject, takeUntil} from 'rxjs';
 
-import {PopupMessageType, ConnectionStatus, ConnectionUpdate, PopupMessage} from '../../common/types';
 import {StorageService} from '../../common/services';
+import {ConnectionStatus, ConnectionUpdate, PopupMessage,PopupMessageType} from '../../common/types';
 import {createAction} from '../actions';
-
 import {MessageService} from './message-service';
 import {TabService} from './tab-service';
 

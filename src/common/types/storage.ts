@@ -1,4 +1,4 @@
-import {typeguard, isEnum, isString} from '../utils';
+import {isEnum, isString,typeguard} from '../utils';
 import {ConnectionStatus} from './popup-message';
 
 export const CONNECTION_STATUS_STORAGE_KEY = 'connectionStatus';

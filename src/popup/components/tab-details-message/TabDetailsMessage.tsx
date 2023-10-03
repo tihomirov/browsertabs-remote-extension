@@ -1,7 +1,7 @@
+import {Icon} from '@rmwc/icon';
+import {Typography} from '@rmwc/typography';
 import React, {FC} from 'react';
 import {useTranslation} from 'react-i18next';
-import {Typography} from '@rmwc/typography';
-import {Icon} from '@rmwc/icon';
 
 import {ConnectionStatus} from '../../../common/types';
 import s from './styles.module.scss';

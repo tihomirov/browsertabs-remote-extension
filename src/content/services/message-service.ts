@@ -1,7 +1,7 @@
 import {Observable, Subject} from 'rxjs';
 import browser from 'webextension-polyfill';
 
-import {BackgroundMessage, PopupMessage, popupMessageTypeguard, backgroundMessageTypeguard} from '../../common/types';
+import {BackgroundMessage, backgroundMessageTypeguard,PopupMessage, popupMessageTypeguard} from '../../common/types';
 
 export class MessageService {
   private readonly _tabMessage$ = new Subject<PopupMessage>();

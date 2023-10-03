@@ -1,7 +1,7 @@
-import {Browser, Storage} from 'webextension-polyfill';
 import {Observable, Subject} from 'rxjs';
+import {Browser, Storage} from 'webextension-polyfill';
 
-import {CONNECTION_STATUS_STORAGE_KEY, ConnectionUpdate, ConnectionsStatus, connectionUpdateTypeguard} from '../../common/types';
+import {CONNECTION_STATUS_STORAGE_KEY, ConnectionsStatus, ConnectionUpdate, connectionUpdateTypeguard} from '../../common/types';
 
 type ConnectionUpdateData = Readonly<{
   tabId: number;

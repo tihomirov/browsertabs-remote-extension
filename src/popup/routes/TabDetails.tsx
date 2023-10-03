@@ -1,15 +1,15 @@
+import {Grid, GridCell} from '@rmwc/grid';
+import {observer} from 'mobx-react-lite';
 import React, {FC, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
-import {observer} from 'mobx-react-lite';
-import {Grid, GridCell} from '@rmwc/grid';
 
 import {ConnectionStatus} from '../../common/types';
-import {TabStatus} from '../components/tab-status';
-import {TabQrCode} from '../components/tab-qr-code';
+import {Loader} from '../components/loader';
 import {TabActions} from '../components/tab-actions';
 import {TabDetailsMessage} from '../components/tab-details-message';
+import {TabQrCode} from '../components/tab-qr-code';
+import {TabStatus} from '../components/tab-status';
 import {useStores} from '../hooks';
-import {Loader} from '../components/loader';
 
 export const TabDetails: FC = observer(() => {
   const {tabsStore} = useStores();

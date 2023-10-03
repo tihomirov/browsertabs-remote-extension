@@ -1,5 +1,5 @@
-import React, {FC, PropsWithChildren} from 'react';
 import {ThemeProvider as RmwcThemeProvider} from '@rmwc/theme';
+import React, {FC, PropsWithChildren} from 'react';
 
 import s from './styles.module.scss';
 

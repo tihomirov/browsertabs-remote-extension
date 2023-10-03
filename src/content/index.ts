@@ -1,7 +1,7 @@
 import browser from 'webextension-polyfill';
 
-import {MessageService, TabService, PeerService} from './services';
 import {StorageService} from '../common/services';
+import {MessageService, PeerService,TabService} from './services';
 
 start();
 

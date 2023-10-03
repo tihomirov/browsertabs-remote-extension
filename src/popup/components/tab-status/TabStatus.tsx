@@ -1,8 +1,8 @@
+import {ListItemGraphic} from '@rmwc/list';
+import {Typography} from '@rmwc/typography';
 import classNames from 'classnames';
 import React, {FC} from 'react';
 import {useTranslation} from 'react-i18next';
-import {Typography} from '@rmwc/typography';
-import {ListItemGraphic} from '@rmwc/list';
 
 import {ConnectionStatus} from '../../../common/types';
 import s from './styles.module.scss';

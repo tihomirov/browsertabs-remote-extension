@@ -1,8 +1,8 @@
-import {makeObservable, observable, runInAction, computed} from 'mobx';
+import {computed,makeObservable, observable, runInAction} from 'mobx';
 import {Tabs} from 'webextension-polyfill';
 
-import {PopupMessageType, ConnectionStatus} from '../../common/types';
-import {tabsService, storageService} from '../services';
+import {ConnectionStatus,PopupMessageType} from '../../common/types';
+import {storageService,tabsService} from '../services';
 
 export type Tab = {
   tab: Tabs.Tab & Required<Pick<Tabs.Tab, 'id'>>;

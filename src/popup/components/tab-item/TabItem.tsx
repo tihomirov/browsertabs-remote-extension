@@ -1,11 +1,11 @@
-import React, {FC, useCallback} from 'react';
-import {observer} from 'mobx-react-lite';
-import {ListItem, ListItemText, ListItemMeta} from '@rmwc/list';
+import {ListItem, ListItemMeta,ListItemText} from '@rmwc/list';
 import {Tooltip} from '@rmwc/tooltip';
+import {observer} from 'mobx-react-lite';
+import React, {FC, useCallback} from 'react';
 import {useNavigate} from 'react-router-dom';
 
-import {TabStatus} from '../../components/tab-status';
 import {ConnectionStatus} from '../../../common/types';
+import {TabStatus} from '../../components/tab-status';
 import {Tab} from '../../stores/tabs-store';
 
 type TabItemProps = Readonly<{

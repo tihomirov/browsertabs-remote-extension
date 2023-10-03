@@ -1,7 +1,7 @@
+import {List} from '@rmwc/list';
 import {observer} from 'mobx-react-lite';
 import React, {FC} from 'react';
 import {useTranslation} from 'react-i18next';
-import {List} from '@rmwc/list';
 
 import {useStores} from '../../hooks';
 import {Loader} from '../loader';

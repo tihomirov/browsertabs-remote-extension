@@ -1,5 +1,5 @@
-import React, {FC} from 'react';
 import {CircularProgress, CircularProgressProps} from '@rmwc/circular-progress';
+import React, {FC} from 'react';
 
 import * as s from './styles.module.scss';
 

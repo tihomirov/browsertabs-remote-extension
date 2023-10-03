@@ -1,4 +1,4 @@
-import {typeguard, isEnum} from '../utils';
+import {isEnum,typeguard} from '../utils';
 
 export enum PopupMessageType {
   StartConnection,

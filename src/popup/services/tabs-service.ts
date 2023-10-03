@@ -1,6 +1,6 @@
-import {runtime, tabs, Tabs, Runtime} from 'webextension-polyfill';
 import {fromEventPattern, Observable} from 'rxjs';
 import {filter, map} from 'rxjs/operators';
+import {Runtime,runtime, Tabs, tabs} from 'webextension-polyfill';
 
 import {PopupMessage, popupMessageTypeguard} from '../../common/types';
 import {isSomething} from '../../common/utils';

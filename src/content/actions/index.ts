@@ -2,7 +2,6 @@ import {Action, ActionType} from 'browsertabs-remote-common/src/common';
 
 import {assertUnreachable} from '../../common/utils';
 import {MessageService} from '../services';
-
 import {ActionCommand} from './actions';
 import {CloseActionCommand} from './close-tab-action';
 import {CreateActionCommand} from './create-tab-action';

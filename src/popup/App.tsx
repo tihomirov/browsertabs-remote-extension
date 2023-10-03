@@ -1,12 +1,12 @@
+import './styles.module.scss';
+
 import React, {FC} from 'react';
 import {createMemoryRouter, RouterProvider} from 'react-router-dom';
 
-import {Root, Home, TabDetails} from './routes';
-import {ErrorPage} from './ErrorPage';
-import {RootStore, StoreProvider} from './stores';
 import {ThemeProvider} from './components/theme-provider';
-
-import './styles.module.scss';
+import {ErrorPage} from './ErrorPage';
+import {Home, Root, TabDetails} from './routes';
+import {RootStore, StoreProvider} from './stores';
 
 const rootStore = new RootStore();
 
