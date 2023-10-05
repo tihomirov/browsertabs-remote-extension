@@ -1,4 +1,4 @@
-import {Grid, GridRow} from '@rmwc/grid';
+import {Grid} from '@rmwc/grid';
 import {observer} from 'mobx-react-lite';
 import React, {FC, useCallback} from 'react';
 
