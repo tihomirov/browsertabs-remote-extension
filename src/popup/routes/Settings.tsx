@@ -3,7 +3,8 @@ import {observer} from 'mobx-react-lite';
 import React, {FC, useCallback} from 'react';
 
 import {Loader} from '../components/loader';
-import {SettingsThemeSelect} from '../components/settings-theme';
+import {SettingsAutoStartConnection} from '../components/settings-auto-start-connection';
+import {SettingsThemeSelect} from '../components/settings-theme-select';
 import {useStores} from '../hooks';
 import {SettingsTheme} from '../services';
 
@@ -14,15 +15,21 @@ export const Settings: FC = observer(() => {
     settingsStore.saveTheme(theme);
   }, [settingsStore]);
 
+  const onValueChange = useCallback((value: boolean) => {
+    settingsStore.saveAutoStartConnection(value);
+  }, [settingsStore]);
+
   if (!settingsStore.theme) {
     return <Loader size="xlarge" />;
   }
 
   return (
     <Grid>
-      <GridRow>
-        <SettingsThemeSelect theme={settingsStore.theme} onThemeChange={onThemeChange} />
-      </GridRow>
+      <SettingsThemeSelect value={settingsStore.theme} onValueChange={onThemeChange} />
+      <SettingsAutoStartConnection
+        value={settingsStore.autoStartConnection}
+        onValueChange={onValueChange}
+      />
     </Grid>
   );
 });

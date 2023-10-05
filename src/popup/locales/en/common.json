@@ -18,5 +18,6 @@
   "connection-details-message-connected": "Successfully connected!",
   "connection-details-message-closed": "No connection created. Press CONNECT button!",
   "connection-details-message-error": "Connection error: {{error}}",
-  "color-theme": "Color theme"
+  "settings-color-theme": "Color theme",
+  "settings-auto-start-connection": "Autostart conenction"
 }

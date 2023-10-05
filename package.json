@@ -28,6 +28,7 @@
 		"@rmwc/icon-button": "^8.0.8",
 		"@rmwc/list": "^8.0.8",
 		"@rmwc/select": "^8.0.8",
+		"@rmwc/switch": "^8.0.8",
 		"@rmwc/theme": "^8.0.8",
 		"@rmwc/tooltip": "^8.0.8",
 		"@rmwc/top-app-bar": "^8.0.8",

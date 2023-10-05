@@ -8,8 +8,8 @@ import {SettingsTheme} from '../../services';
 import s from './styles.module.scss';
 
 type SettingsThemeSelectProps = Readonly<{
-  theme: SettingsTheme;
-  onThemeChange: (theme: SettingsTheme) => void;
+  value: SettingsTheme;
+  onValueChange: (theme: SettingsTheme) => void;
 }>;
 
 const themeOptions = [
@@ -18,27 +18,31 @@ const themeOptions = [
     value: SettingsTheme.LightCrystalBlue
   },
   {
+    label: 'Dark Crystal Blue',
+    value: SettingsTheme.DarkCrystalBlue
+  },
+  {
     label: 'Deep Black',
     value: SettingsTheme.DeepBlack
   }
 ];
 
-export const SettingsThemeSelect: FC<SettingsThemeSelectProps> = ({theme, onThemeChange}) => {
+export const SettingsThemeSelect: FC<SettingsThemeSelectProps> = ({value, onValueChange}) => {
   const {t} = useTranslation();
 
   const onChange = useCallback((event: FormEvent<HTMLSelectElement>) => {
-    onThemeChange(event.currentTarget.value as SettingsTheme);
-  }, [onThemeChange]);
+    onValueChange(event.currentTarget.value as SettingsTheme);
+  }, [onValueChange]);
 
   return (
     <>
-      <GridCell className={s.label} span={2}>
-        <Typography use="headline6">{t('common:color-theme')}</Typography>
+      <GridCell align='middle' span={2}>
+        <Typography use="headline6">{t('common:settings-color-theme')}</Typography>
       </GridCell>
-      <GridCell span={2}>
+      <GridCell className={s.control} align='middle' span={2}>
         <Select
           enhanced
-          defaultValue={theme}
+          defaultValue={value}
           options={themeOptions}
           onChange={onChange}
         />

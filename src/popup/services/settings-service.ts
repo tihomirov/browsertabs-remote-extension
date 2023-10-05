@@ -2,17 +2,20 @@ import {storage} from 'webextension-polyfill';
 
 export enum SettingsTheme {
   LightCrystalBlue = 'LightCrystalBlue',
+  DarkCrystalBlue = 'DarkCrystalBlue',
   DeepBlack = 'DeepBlack',
 }
 
 export type Settings = Readonly<{
   theme?: SettingsTheme
+  autoStartConnection?: boolean;
 }>;
 
 const SETTINGS_STORAGE_KEY = 'settings';
 
 const DEFAULT_SETTINGS = {
-  theme: SettingsTheme.LightCrystalBlue
+  theme: SettingsTheme.LightCrystalBlue,
+  autoStartConnection: true,
 };
 
 class SettingsService {
@@ -22,7 +25,7 @@ class SettingsService {
   }
 
   async saveSettings(
-    settings: Settings
+    settings: Settings = DEFAULT_SETTINGS
   ): Promise<void> {
     await storage.local.set({[SETTINGS_STORAGE_KEY]: settings});
   }

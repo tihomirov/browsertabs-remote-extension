@@ -18,5 +18,6 @@
   "connection-details-message-connected": "Успішно підключено!",
   "connection-details-message-closed": "Не створенно підключення. Нажміть кнопку ПІДКЛЮЧТИ!",
   "connection-details-message-error": "Помилка підключення: {{error}}",
-  "color-theme": "Кольорова тема"
+  "settings-color-theme": "Кольорова тема",
+  "settings-auto-start-connection": "Автстарт підключення"
 }

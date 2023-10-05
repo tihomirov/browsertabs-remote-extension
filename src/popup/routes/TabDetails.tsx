@@ -12,7 +12,7 @@ import {TabStatus} from '../components/tab-status';
 import {useStores} from '../hooks';
 
 export const TabDetails: FC = observer(() => {
-  const {tabsStore} = useStores();
+  const {tabsStore, settingsStore} = useStores();
   const {tabId} = useParams();
   const tab = tabsStore.currentTab;
 
@@ -25,7 +25,7 @@ export const TabDetails: FC = observer(() => {
   }, [tabId]);
 
   useEffect(() => {
-    if (tab && tab.status === ConnectionStatus.Closed) {
+    if (tab && settingsStore.autoStartConnection && tab.status === ConnectionStatus.Closed) {
       tabsStore.startConnection(tab.tab.id);
     }
   }, [tab?.tab.id]);

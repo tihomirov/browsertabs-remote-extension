@@ -17,16 +17,24 @@ export class SettingsStore {
     return this._settings?.theme;
   }
 
-  async saveTheme(theme: SettingsTheme): Promise<void> {
-    if (!this._settings) {
-      return;
-    }
+  @computed
+  get autoStartConnection(): boolean {
+    return this._settings?.autoStartConnection ?? true;
+  }
 
+  async saveTheme(theme: SettingsTheme): Promise<void> {
     runInAction(() => this._settings = {
       ...this._settings,
       theme,
     });
+    await settingsService.saveSettings(this._settings);
+  }
 
+  async saveAutoStartConnection(autoStartConnection: boolean): Promise<void> {
+    runInAction(() => this._settings = {
+      ...this._settings,
+      autoStartConnection,
+    });
     await settingsService.saveSettings(this._settings);
   }
 
