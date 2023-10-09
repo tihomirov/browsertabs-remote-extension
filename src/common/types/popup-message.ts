@@ -6,7 +6,7 @@ export enum PopupMessageType {
   CloseConnection,
 }
 
-export enum ConnectionStatus {
+export enum ConnectionStatusType {
 	Closed,
 	Error,
 	Open,
@@ -15,10 +15,12 @@ export enum ConnectionStatus {
 
 export type StartConnectionPopupMessage = Readonly<{
   popupMessagetype: PopupMessageType.StartConnection;
+  ttl: number;
 }>;
 
 export type RestartConnectionPopupMessage = Readonly<{
   popupMessagetype: PopupMessageType.RestartConnection;
+  ttl: number;
 }>;
 
 export type CloseConnectionPopupMessage = Readonly<{

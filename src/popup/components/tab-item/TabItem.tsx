@@ -4,7 +4,7 @@ import {observer} from 'mobx-react-lite';
 import React, {FC, useCallback} from 'react';
 import {useNavigate} from 'react-router-dom';
 
-import {ConnectionStatus} from '../../../common/types';
+import {ConnectionStatusType} from '../../../common/types';
 import {TabStatus} from '../../components/tab-status';
 import {Tab} from '../../stores/tabs-store';
 
@@ -23,7 +23,7 @@ export const TabItem: FC<TabItemProps> = observer(({tab}) => {
     <ListItem onClick={onClick}>
       <TabStatus status={tab.status} listIcon />
       <ListItemText>{tab.tab.title}</ListItemText>
-      {tab.status === ConnectionStatus.Error && (
+      {tab.status === ConnectionStatusType.Error && (
         <Tooltip content={tab.error}>
           <ListItemMeta icon="error" />
         </Tooltip>

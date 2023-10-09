@@ -8,7 +8,7 @@ import {Subject, takeUntil} from 'rxjs';
 import {StorageService} from '../../common/services';
 import {
   ConnectionStatus,
-  ConnectionUpdate,
+  ConnectionStatusType,
   PopupMessage,
   PopupMessageType
 } from '../../common/types';
@@ -31,10 +31,7 @@ export class PeerService {
       takeUntil(this._unsubscribeSubject$)
     ).subscribe(this.onTabMessage);
 
-    this.setConnectionUpdate({
-      status: this.connectionStatus,
-      peerId: this._connection?.peerId,
-    });
+    this.setConnectionUpdate(this.getConnectionStatus());
   }
 
   dispose(): void {
@@ -43,12 +40,23 @@ export class PeerService {
     this._unsubscribeSubject$.complete();
   }
 
-  private get connectionStatus(): ConnectionStatus {
+  private getConnectionStatus(): Omit<ConnectionStatus, 'updatedAt'> {
     if (!this._connection) {
-      return ConnectionStatus.Closed;
+      return {
+        status: ConnectionStatusType.Closed,
+        error: undefined,
+      };
     }
 
-    return this._dataConnection ? ConnectionStatus.Connected : ConnectionStatus.Open;
+    return this._dataConnection ? {
+      status: ConnectionStatusType.Connected,
+      peerId: this._connection?.peerId,
+      error: undefined,
+    } : {
+      status: ConnectionStatusType.Open,
+      peerId: this._connection?.peerId,
+      error: undefined,
+    };
   }
 
   private readonly onTabMessage = (message: PopupMessage): void => {
@@ -75,22 +83,26 @@ export class PeerService {
 
     this._connection.open$.subscribe((peerId) => {
       this.setConnectionUpdate({
-        status: ConnectionStatus.Open,
+        status: ConnectionStatusType.Open,
+        openAt: Date.now(),
+        error: undefined,
         peerId,
       });
     });
 
     this._connection.error$.subscribe((error) => {
       this.setConnectionUpdate({
-        status: ConnectionStatus.Error,
+        status: ConnectionStatusType.Error,
         error: error.type,
       });
     });
 
     this._connection.connected$.subscribe((connection: DataConnection) => {
       this.setConnectionUpdate({
-        status: ConnectionStatus.Connected,
+        status: ConnectionStatusType.Connected,
         peerId: this._connection?.peerId,
+        connectedAt: Date.now(),
+        error: undefined,
       });
 
       this._dataConnection = connection;
@@ -100,7 +112,8 @@ export class PeerService {
       this._dataConnection = undefined;
       this._connection = undefined;
       this.setConnectionUpdate({
-        status: ConnectionStatus.Closed
+        status: ConnectionStatusType.Closed,
+        error: undefined,
       });
     });
 
@@ -125,7 +138,9 @@ export class PeerService {
     this._connection?.destroy();
   }
 
-  private async setConnectionUpdate(update:ConnectionUpdate): Promise<void> {
+  private async setConnectionUpdate(
+    update: Omit<ConnectionStatus, 'updatedAt'>,
+  ): Promise<void> {
     this._storageService.setConnectionStatusUpdate(this._tabId, update);
   }
 }

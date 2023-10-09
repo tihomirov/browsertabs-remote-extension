@@ -2,12 +2,12 @@ import {Button} from '@rmwc/button';
 import React, {FC, useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
 
-import {ConnectionStatus} from '../../../common/types';
+import {ConnectionStatusType} from '../../../common/types';
 import {useStores} from '../../hooks';
 import s from './styles.module.scss';
 
 type TabActionsProps = Readonly<{
-  status: ConnectionStatus;
+  status: ConnectionStatusType;
   tabId: number;
 }>;
 
@@ -27,7 +27,7 @@ export const TabActions: FC<TabActionsProps> = ({status, tabId}) => {
     tabsStore.startConnection(tabId);
   }, [tabsStore, tabId]);
 
-  if (status === ConnectionStatus.Open || status === ConnectionStatus.Connected) {
+  if (status === ConnectionStatusType.Open || status === ConnectionStatusType.Connected) {
     return (
       <Button
         className={s.button}
@@ -37,7 +37,7 @@ export const TabActions: FC<TabActionsProps> = ({status, tabId}) => {
     );
   }
 
-  if (status === ConnectionStatus.Error) {
+  if (status === ConnectionStatusType.Error) {
     return (
       <Button
         className={s.button}
@@ -47,7 +47,7 @@ export const TabActions: FC<TabActionsProps> = ({status, tabId}) => {
     );
   }
 
-  if (status === ConnectionStatus.Closed) {
+  if (status === ConnectionStatusType.Closed) {
     return (
       <Button
         className={s.button}

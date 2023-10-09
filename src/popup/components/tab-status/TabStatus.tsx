@@ -4,30 +4,30 @@ import classNames from 'classnames';
 import React, {FC} from 'react';
 import {useTranslation} from 'react-i18next';
 
-import {ConnectionStatus} from '../../../common/types';
+import {ConnectionStatusType} from '../../../common/types';
 import s from './styles.module.scss';
 
 type TabStatusProps = Readonly<{
-  status: ConnectionStatus;
+  status: ConnectionStatusType;
   listIcon?: boolean;
 }>;
 
 // TODO: add types for local keys
-const tabStatusLocalKey: Record<ConnectionStatus, string> = {
-  [ConnectionStatus.Closed]: 'common:connection-status-closed',
-  [ConnectionStatus.Open]: 'common:connection-status-open',
-  [ConnectionStatus.Connected]: 'common:connection-status-connected',
-  [ConnectionStatus.Error]: 'common:connection-status-error',
+const tabStatusLocalKey: Record<ConnectionStatusType, string> = {
+  [ConnectionStatusType.Closed]: 'common:connection-status-closed',
+  [ConnectionStatusType.Open]: 'common:connection-status-open',
+  [ConnectionStatusType.Connected]: 'common:connection-status-connected',
+  [ConnectionStatusType.Error]: 'common:connection-status-error',
 };
 
 export const TabStatus: FC<TabStatusProps> = ({status, listIcon = false}) => {
   const {t} = useTranslation();
 
   const statusClassName = classNames(s.status, {
-    [s.closed]: status === ConnectionStatus.Closed,
-    [s.open]: status === ConnectionStatus.Open,
-    [s.connected]: status === ConnectionStatus.Connected,
-    [s.error]: status === ConnectionStatus.Error,
+    [s.closed]: status === ConnectionStatusType.Closed,
+    [s.open]: status === ConnectionStatusType.Open,
+    [s.connected]: status === ConnectionStatusType.Connected,
+    [s.error]: status === ConnectionStatusType.Error,
     [s.text]: !listIcon,
   });
 

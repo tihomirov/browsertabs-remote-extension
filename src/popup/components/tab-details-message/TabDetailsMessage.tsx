@@ -3,26 +3,26 @@ import {Typography} from '@rmwc/typography';
 import React, {FC} from 'react';
 import {useTranslation} from 'react-i18next';
 
-import {ConnectionStatus} from '../../../common/types';
+import {ConnectionStatusType} from '../../../common/types';
 import s from './styles.module.scss';
 
 type TabStatusProps = Readonly<{
-  status: ConnectionStatus;
+  status: ConnectionStatusType;
   error?: string;
 }>;
 
-const statusIcon: Record<ConnectionStatus, string | undefined> = {
-  [ConnectionStatus.Error]: 'error',
-  [ConnectionStatus.Connected]: 'link',
-  [ConnectionStatus.Closed]: 'portable_wifi_off',
-  [ConnectionStatus.Open]: undefined,
+const statusIcon: Record<ConnectionStatusType, string | undefined> = {
+  [ConnectionStatusType.Error]: 'error',
+  [ConnectionStatusType.Connected]: 'link',
+  [ConnectionStatusType.Closed]: 'portable_wifi_off',
+  [ConnectionStatusType.Open]: undefined,
 };
 
-const statusMessages: Record<ConnectionStatus, string | undefined> = {
-  [ConnectionStatus.Error]: 'common:connection-details-message-error',
-  [ConnectionStatus.Connected]: 'common:connection-details-message-connected',
-  [ConnectionStatus.Closed]: 'common:connection-details-message-closed',
-  [ConnectionStatus.Open]:  undefined,
+const statusMessages: Record<ConnectionStatusType, string | undefined> = {
+  [ConnectionStatusType.Error]: 'common:connection-details-message-error',
+  [ConnectionStatusType.Connected]: 'common:connection-details-message-connected',
+  [ConnectionStatusType.Closed]: 'common:connection-details-message-closed',
+  [ConnectionStatusType.Open]:  undefined,
 };
 
 const defaultErrorMessage = 'Unknown';
@@ -30,7 +30,7 @@ const defaultErrorMessage = 'Unknown';
 export const TabDetailsMessage: FC<TabStatusProps> = ({status, error}) => {
   const {t} = useTranslation();
 
-  if (status === ConnectionStatus.Open) {
+  if (status === ConnectionStatusType.Open) {
     return null;
   }
 

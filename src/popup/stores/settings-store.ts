@@ -22,6 +22,11 @@ export class SettingsStore {
     return this._settings?.autoStartConnection ?? true;
   }
 
+  @computed
+  get connectionTtl(): number {
+    return 2 * 60 * 60; // sec
+  }
+
   async saveTheme(theme: SettingsTheme): Promise<void> {
     runInAction(() => this._settings = {
       ...this._settings,

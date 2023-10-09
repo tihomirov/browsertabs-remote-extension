@@ -3,7 +3,7 @@ import {observer} from 'mobx-react-lite';
 import React, {FC, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 
-import {ConnectionStatus} from '../../common/types';
+import {ConnectionStatusType} from '../../common/types';
 import {Loader} from '../components/loader';
 import {TabActions} from '../components/tab-actions';
 import {TabDetailsMessage} from '../components/tab-details-message';
@@ -25,7 +25,7 @@ export const TabDetails: FC = observer(() => {
   }, [tabId]);
 
   useEffect(() => {
-    if (tab && settingsStore.autoStartConnection && tab.status === ConnectionStatus.Closed) {
+    if (tab && settingsStore.autoStartConnection && tab.status === ConnectionStatusType.Closed) {
       tabsStore.startConnection(tab.tab.id);
     }
   }, [tab?.tab.id]);
@@ -43,7 +43,7 @@ export const TabDetails: FC = observer(() => {
         <TabActions tabId={tab.tab.id} status={tab.status} />
       </GridCell>
       <GridCell span={4}>
-        {tab.status === ConnectionStatus.Open
+        {tab.status === ConnectionStatusType.Open
           ? <TabQrCode peerId={tab.peerId} />
           : <TabDetailsMessage status={tab.status} error={tab.error} />
         }

@@ -1,12 +1,13 @@
-import {computed,makeObservable, observable, runInAction} from 'mobx';
+import {computed, makeObservable, observable, runInAction} from 'mobx';
 import {Tabs} from 'webextension-polyfill';
 
-import {ConnectionStatus,PopupMessageType} from '../../common/types';
-import {storageService,tabsService} from '../services';
+import {ConnectionStatus, ConnectionStatusType, PopupMessageType} from '../../common/types';
+import {storageService, tabsService} from '../services';
+import {RootStore} from './root-store';
 
 export type Tab = {
   tab: Tabs.Tab & Required<Pick<Tabs.Tab, 'id'>>;
-  status: ConnectionStatus;
+  status: ConnectionStatusType;
   peerId?: string;
   error?: string
 };
@@ -18,7 +19,7 @@ export class TabsStore {
   private _currentTabId: number | undefined = undefined;
   private readonly _tabs = observable.array<Tab>([]);
 
-  constructor() {
+  constructor(private readonly _rootStore: RootStore) {
     makeObservable(this);
 
     // TODO: unsubscribe
@@ -61,6 +62,7 @@ export class TabsStore {
   ): Promise<void> {
     await tabsService.sendMessage(tabId, {
       popupMessagetype: PopupMessageType.StartConnection,
+      ttl: this._rootStore.settingsStore.connectionTtl,
     });
   }
 
@@ -69,6 +71,7 @@ export class TabsStore {
   ): Promise<void> {
     await tabsService.sendMessage(tabId, {
       popupMessagetype: PopupMessageType.RestartConnection,
+      ttl: this._rootStore.settingsStore.connectionTtl,
     });
   }
 
@@ -96,8 +99,10 @@ export class TabsStore {
     runInAction(() => {
       this._tabs.replace(
         tabsWithId.map(tab => {
-          const tabStatus = connectionsStatus?.[tab.id] ?? {
-            status: ConnectionStatus.Closed
+          const tabStatus: ConnectionStatus = connectionsStatus?.[tab.id] ?? {
+            status: ConnectionStatusType.Closed,
+            updatedAt: Date.now(),
+            error: undefined,
           };
 
           return {

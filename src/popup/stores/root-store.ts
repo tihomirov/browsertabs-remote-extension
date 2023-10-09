@@ -6,7 +6,7 @@ export class RootStore {
   settingsStore: SettingsStore;
 
   constructor() {
-    this.tabsStore = new TabsStore();
+    this.tabsStore = new TabsStore(this);
     this.settingsStore = new SettingsStore();
   }
 }

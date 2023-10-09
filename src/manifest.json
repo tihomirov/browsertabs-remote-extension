@@ -19,7 +19,8 @@
 	 "content_scripts": [
     {
       "js": ["content/index.ts"],
-      "matches": ["https://*/*", "http://*/*"]
+      "matches": ["https://*/*", "http://*/*"],
+			"run_at": "document_idle"
     }
   ],
 	"action": { 
