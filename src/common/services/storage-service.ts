@@ -47,7 +47,7 @@ export class StorageService {
 
   async getConnectionStatus(
     tabId: number,
-  ): Promise<ConnectionStatus> {
+  ): Promise<ConnectionStatus | undefined> {
     const data = await this._browser.storage.local.get(CONNECTION_STATUS_STORAGE_KEY);
     return data[CONNECTION_STATUS_STORAGE_KEY]?.[tabId];
   }

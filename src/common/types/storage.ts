@@ -10,6 +10,7 @@ export type ConnectionStatus = Readonly<{
   connectedAt?: number;
   openAt?: number;
   peerId?: string;
+  ttl?: number;
 }>;
 
 export type ConnectionsStatus = Record<string, ConnectionStatus>;

@@ -31,7 +31,7 @@ export class PeerService {
       takeUntil(this._unsubscribeSubject$)
     ).subscribe(this.onTabMessage);
 
-    this.setConnectionUpdate(this.getConnectionStatus());
+    this.init();
   }
 
   dispose(): void {
@@ -40,31 +40,25 @@ export class PeerService {
     this._unsubscribeSubject$.complete();
   }
 
-  private getConnectionStatus(): Omit<ConnectionStatus, 'updatedAt'> {
-    if (!this._connection) {
-      return {
+  private async init(): Promise<void>{
+    const connection = await this._storageService.getConnectionStatus(this._tabId);
+
+    if (connection?.ttl && connection?.peerId && shouldRestoreConnection(connection)) {
+      this.startConnection(connection.ttl, connection?.peerId);
+    } else {
+      this.setConnectionUpdate({
         status: ConnectionStatusType.Closed,
         error: undefined,
-      };
+      });
     }
-
-    return this._dataConnection ? {
-      status: ConnectionStatusType.Connected,
-      peerId: this._connection?.peerId,
-      error: undefined,
-    } : {
-      status: ConnectionStatusType.Open,
-      peerId: this._connection?.peerId,
-      error: undefined,
-    };
   }
 
   private readonly onTabMessage = (message: PopupMessage): void => {
     switch (message.popupMessagetype) {
     case PopupMessageType.StartConnection:
-      return this.startConnection();
+      return this.startConnection(message.ttl);
     case PopupMessageType.RestartConnection:
-      return this.restartConnection();
+      return this.restartConnection(message.ttl);
     case PopupMessageType.CloseConnection:
       return this.closeConnection();
     default:
@@ -73,13 +67,13 @@ export class PeerService {
     }
   };
 
-  private startConnection(): void {
+  private startConnection(ttl: number, peerId?: string): void {
     if (this._connection) {
       console.error('Connection is created and started');
       return;
     }
 
-    this._connection = new PeerExtentionConnection(this._tabService.getTabInfo());
+    this._connection = new PeerExtentionConnection(this._tabService.getTabInfo(), peerId);
 
     this._connection.open$.subscribe((peerId) => {
       this.setConnectionUpdate({
@@ -87,6 +81,7 @@ export class PeerService {
         openAt: Date.now(),
         error: undefined,
         peerId,
+        ttl,
       });
     });
 
@@ -124,9 +119,9 @@ export class PeerService {
     });
   }
 
-  private restartConnection(): void {
+  private restartConnection(ttl: number): void {
     this.closeConnection();
-    this.startConnection();
+    this.startConnection(ttl);
   }
 
   private closeConnection(): void {
@@ -143,4 +138,16 @@ export class PeerService {
   ): Promise<void> {
     this._storageService.setConnectionStatusUpdate(this._tabId, update);
   }
+}
+
+function shouldRestoreConnection({status, peerId, ttl, openAt}: ConnectionStatus): boolean {
+  if (!peerId || !ttl || !openAt) {
+    return false;
+  }
+
+  const isConnectionActive = status === ConnectionStatusType.Connected
+    || status === ConnectionStatusType.Open;
+  const isExpired = Date.now() - openAt > ttl * 1000;
+
+  return isConnectionActive && !isExpired;
 }
