@@ -2,6 +2,9 @@ import {computed, makeObservable, observable, runInAction} from 'mobx';
 
 import {Settings, settingsService, SettingsTheme} from '../services';
 
+const defaultAutoStartConnection = true;
+const defaultConnectionTtl = 2 * 60 * 60; // sec
+
 export class SettingsStore {
   @observable
   private _settings: Settings | undefined = undefined;
@@ -19,12 +22,12 @@ export class SettingsStore {
 
   @computed
   get autoStartConnection(): boolean {
-    return this._settings?.autoStartConnection ?? true;
+    return this._settings?.autoStartConnection ?? defaultAutoStartConnection;
   }
 
   @computed
   get connectionTtl(): number {
-    return 2 * 60 * 60; // sec
+    return this._settings?.connectionTtl ?? defaultConnectionTtl;
   }
 
   async saveTheme(theme: SettingsTheme): Promise<void> {
@@ -39,6 +42,14 @@ export class SettingsStore {
     runInAction(() => this._settings = {
       ...this._settings,
       autoStartConnection,
+    });
+    await settingsService.saveSettings(this._settings);
+  }
+
+  async saveConnectionTtl(connectionTtl: number): Promise<void> {
+    runInAction(() => this._settings = {
+      ...this._settings,
+      connectionTtl,
     });
     await settingsService.saveSettings(this._settings);
   }

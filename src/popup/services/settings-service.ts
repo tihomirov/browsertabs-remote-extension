@@ -9,6 +9,7 @@ export enum SettingsTheme {
 export type Settings = Readonly<{
   theme?: SettingsTheme
   autoStartConnection?: boolean;
+  connectionTtl?: number;
 }>;
 
 const SETTINGS_STORAGE_KEY = 'settings';

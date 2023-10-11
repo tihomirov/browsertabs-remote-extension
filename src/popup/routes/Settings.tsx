@@ -4,6 +4,7 @@ import React, {FC, useCallback} from 'react';
 
 import {Loader} from '../components/loader';
 import {SettingsAutoStartConnection} from '../components/settings-auto-start-connection';
+import {SettingsConnectionTtl} from '../components/settings-connection-ttl';
 import {SettingsThemeSelect} from '../components/settings-theme-select';
 import {useStores} from '../hooks';
 import {SettingsTheme} from '../services';
@@ -15,8 +16,12 @@ export const Settings: FC = observer(() => {
     settingsStore.saveTheme(theme);
   }, [settingsStore]);
 
-  const onValueChange = useCallback((value: boolean) => {
+  const onAutoStartConnectionChange = useCallback((value: boolean) => {
     settingsStore.saveAutoStartConnection(value);
+  }, [settingsStore]);
+
+  const onConnectionTtlChange = useCallback((value: number) => {
+    settingsStore.saveConnectionTtl(value);
   }, [settingsStore]);
 
   if (!settingsStore.theme) {
@@ -28,7 +33,11 @@ export const Settings: FC = observer(() => {
       <SettingsThemeSelect value={settingsStore.theme} onValueChange={onThemeChange} />
       <SettingsAutoStartConnection
         value={settingsStore.autoStartConnection}
-        onValueChange={onValueChange}
+        onValueChange={onAutoStartConnectionChange}
+      />
+      <SettingsConnectionTtl
+        value={settingsStore.connectionTtl}
+        onValueChange={onConnectionTtlChange}
       />
     </Grid>
   );
