@@ -31,11 +31,7 @@ class TabsService {
     tabId: number,
     message: PopupMessage
   ): Promise<void> {
-    try {
-      await tabs.sendMessage(tabId, message);
-    } catch (error) {
-      console.error(tabId, error);
-    }
+    return tabs.sendMessage(tabId, message);
   }
 
   async reloadTab(tabId: number): Promise<void> {

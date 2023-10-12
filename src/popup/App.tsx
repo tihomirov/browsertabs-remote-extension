@@ -3,6 +3,7 @@ import './styles.module.scss';
 import React, {FC} from 'react';
 import {createMemoryRouter, RouterProvider} from 'react-router-dom';
 
+import {ErrorSnackbar} from './components/error-snackbar';
 import {ThemeProvider} from './components/theme-provider';
 import {ErrorPage} from './ErrorPage';
 import {Home, Root, Settings,TabDetails} from './routes';
@@ -36,6 +37,7 @@ export const App: FC = () => (
   <StoreProvider store={rootStore}>
     <ThemeProvider>
       <RouterProvider router={router} />
+      <ErrorSnackbar />
     </ThemeProvider>
   </StoreProvider>
 );

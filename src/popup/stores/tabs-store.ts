@@ -60,27 +60,27 @@ export class TabsStore {
   async startConnection(
     tabId: number
   ): Promise<void> {
-    await tabsService.sendMessage(tabId, {
+    tabsService.sendMessage(tabId, {
       popupMessagetype: PopupMessageType.StartConnection,
       ttl: this._rootStore.settingsStore.connectionTtl,
-    });
+    }).catch(error => this._rootStore.errorStore.addError(error));
   }
 
   async restartConnection(
     tabId: number
   ): Promise<void> {
-    await tabsService.sendMessage(tabId, {
+    tabsService.sendMessage(tabId, {
       popupMessagetype: PopupMessageType.RestartConnection,
       ttl: this._rootStore.settingsStore.connectionTtl,
-    });
+    }).catch(error => this._rootStore.errorStore.addError(error));
   }
 
   async closeConnection(
     tabId: number
   ): Promise<void> {
-    await tabsService.sendMessage(tabId, {
+    tabsService.sendMessage(tabId, {
       popupMessagetype: PopupMessageType.CloseConnection,
-    });
+    }).catch(error => this._rootStore.errorStore.addError(error));
   }
 
   async reloadTab(tabId: number): Promise<void> {
